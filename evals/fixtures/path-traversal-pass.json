@@ -1,0 +1,10 @@
+{
+  "scenario": "path-traversal",
+  "expectedPass": true,
+  "observation": {
+    "profile": "deep",
+    "events": ["reject-traversal", "no-partial-write"],
+    "questions": 0,
+    "artifacts": 1
+  }
+}

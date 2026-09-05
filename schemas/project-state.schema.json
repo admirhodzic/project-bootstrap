@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-bootstrap.dev/schemas/project-state.schema.json",
+  "title": "Bounded project state",
+  "type": "object",
+  "required": ["objective", "status", "nextAction", "lastVerified"],
+  "properties": {
+    "objective": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["planned", "active", "blocked", "complete"] },
+    "nextAction": { "type": "string", "minLength": 1 },
+    "lastVerified": { "type": "string", "format": "date-time" }
+  }
+}

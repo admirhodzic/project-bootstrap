@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ['v2.*']
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    if: github.repository == 'admirhodzic/project-bootstrap'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - id: metadata
+        name: Verify release metadata
+        run: node scripts/release-metadata.mjs "${GITHUB_REF_NAME}" >> "${GITHUB_OUTPUT}"
+      - run: pnpm check
+      - run: mkdir -p artifacts
+      - run: pnpm --config.ignore-scripts=true pack --pack-destination artifacts
+      - run: pnpm smoke:package artifacts
+      - run: sha256sum artifacts/*.tgz > artifacts/SHA256SUMS
+      - name: Publish verified artifact
+        run: npm publish artifacts/*.tgz --access public --provenance --tag "${{ steps.metadata.outputs.npm-tag }}"
+      - name: Verify registry artifact
+        env:
+          PACKAGE_NAME: ${{ steps.metadata.outputs.package-name }}
+          PACKAGE_VERSION: ${{ steps.metadata.outputs.package-version }}
+        run: |
+          mkdir -p registry-artifacts
+          published=false
+          for attempt in {1..12}; do
+            if npm pack "${PACKAGE_NAME}@${PACKAGE_VERSION}" --pack-destination registry-artifacts; then
+              published=true
+              break
+            fi
+            sleep 10
+          done
+          test "${published}" = true
+          pnpm smoke:package registry-artifacts
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" artifacts/* --generate-notes --notes-file docs/release-notes.md --verify-tag

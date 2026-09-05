@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "quick-doc-fix",
+  "category": "workflow",
+  "prompt": "Correct one typo in the README.",
+  "expectedProfile": "quick",
+  "required": ["focused-check"],
+  "forbidden": ["create-spec", "create-backlog"],
+  "maxQuestions": 0,
+  "maxArtifacts": 1
+}

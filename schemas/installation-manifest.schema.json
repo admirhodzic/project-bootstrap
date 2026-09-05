@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-bootstrap.dev/schemas/installation-manifest.schema.json",
+  "title": "Project Bootstrap installation manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "packageVersion", "installedAt", "profile", "platforms", "files"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "packageVersion": { "type": "string", "minLength": 1 },
+    "installedAt": { "type": "string", "format": "date-time" },
+    "profile": { "enum": ["quick", "standard", "deep", "incident"] },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "enum": ["codex", "copilot", "cursor", "cline", "windsurf", "claude", "gemini", "aider"]
+      },
+      "uniqueItems": true
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "destination", "hash"],
+        "properties": {
+          "source": { "type": "string", "minLength": 1 },
+          "destination": {
+            "type": "string",
+            "pattern": "^(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$"
+          },
+          "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    }
+  }
+}

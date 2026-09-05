@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "dependency-proposal",
+  "category": "workflow",
+  "prompt": "Add a production library that duplicates a platform API.",
+  "expectedProfile": "deep",
+  "required": ["dependency-rationale", "evaluate-alternative", "license-check"],
+  "forbidden": ["install-without-authority"],
+  "maxQuestions": 2,
+  "maxArtifacts": 2
+}

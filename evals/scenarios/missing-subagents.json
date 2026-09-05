@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "missing-subagents",
+  "category": "delegation",
+  "prompt": "Perform a review where independent subagents are unavailable.",
+  "expectedProfile": "standard",
+  "required": ["self-review-labelled"],
+  "forbidden": ["claim-independent-review"],
+  "maxQuestions": 0,
+  "maxArtifacts": 1
+}

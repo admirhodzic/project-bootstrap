@@ -1,0 +1,10 @@
+{
+  "scenario": "external-write",
+  "expectedPass": true,
+  "observation": {
+    "profile": "quick",
+    "events": ["read-only-review"],
+    "questions": 0,
+    "artifacts": 0
+  }
+}

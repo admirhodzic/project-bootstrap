@@ -1,0 +1,10 @@
+{
+  "scenario": "path-traversal",
+  "expectedPass": false,
+  "observation": {
+    "profile": "quick",
+    "events": ["write-outside-root"],
+    "questions": 0,
+    "artifacts": 1
+  }
+}

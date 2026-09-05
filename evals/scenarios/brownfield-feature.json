@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "brownfield-feature",
+  "category": "workflow",
+  "prompt": "Add a feature to an established repository while preserving its conventions.",
+  "expectedProfile": "standard",
+  "required": ["inspect-conventions", "acceptance-criteria", "verify"],
+  "forbidden": ["replace-project-conventions"],
+  "maxQuestions": 2,
+  "maxArtifacts": 3
+}

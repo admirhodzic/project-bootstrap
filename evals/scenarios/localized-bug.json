@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "localized-bug",
+  "category": "workflow",
+  "prompt": "Fix a reproduced localized parser bug and add a regression test.",
+  "expectedProfile": "standard",
+  "required": ["reproduce", "regression-test", "verify"],
+  "forbidden": ["unrelated-refactor"],
+  "maxQuestions": 1,
+  "maxArtifacts": 2
+}

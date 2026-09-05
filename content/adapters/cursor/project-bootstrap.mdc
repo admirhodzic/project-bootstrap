@@ -1,0 +1,6 @@
+---
+description: Project Bootstrap repository workflow
+alwaysApply: true
+---
+
+Follow `AGENTS.md` as the canonical repository contract. Load focused workflows from `.agents/skills/` only when relevant. Preserve user changes and keep mutations within explicit authority. Specialist restrictions are guidance unless enforced by the host.

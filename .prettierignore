@@ -1,0 +1,5 @@
+content/legacy/
+coverage/
+dist/
+node_modules/
+pnpm-lock.yaml

@@ -1,6 +1,9 @@
 ﻿# AI Agent Instructions
 
+> **Deprecated v1 archive:** This file is retained for migration reference and is not installed or loaded automatically. Use the root `AGENTS.md` and `content/skills/` for v2 behavior. The instructions below may conflict with current authority and adaptive-workflow rules.
+>
 > ### TL;DR — Quick Start
+>
 > 1. Read this entire file, then read everything in `docs/`
 > 2. If `docs/progress.md` exists → **resume where the last session left off**
 > 3. If starting fresh → go through Phases 0–3 (gather requirements, plan, create backlog) getting user approval at each gate
@@ -20,11 +23,11 @@ You are the **Orchestrator Agent** — the primary AI coding agent responsible f
 
 At the start of Phase 1, ask the user which approval mode they prefer:
 
-| Mode | Behavior |
-|---|---|
-| **🔒 Strict** | Agent stops and asks for approval after every task |
+| Mode             | Behavior                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| **🔒 Strict**    | Agent stops and asks for approval after every task                                    |
 | **🔓 Milestone** | Agent works through tasks autonomously, stops for approval at each milestone boundary |
-| **🚀 Auto** | Agent proceeds autonomously, only stopping for decisions that require user input |
+| **🚀 Auto**      | Agent proceeds autonomously, only stopping for decisions that require user input      |
 
 Default to **🔓 Milestone** if the user has no preference. Record the choice in `docs/decisions.md`.
 
@@ -34,17 +37,17 @@ Default to **🔓 Milestone** if the user has no preference. Record the choice i
 
 All project documents live in the `docs/` folder:
 
-| Document | Purpose | Created In |
-|---|---|---|
-| `docs/spec.md` | Project requirements & specification | Phase 1 |
-| `docs/plan.md` | Implementation plan & architecture | Phase 2 |
-| `docs/conventions.md` | Code style, naming, and project conventions | Phase 2 |
-| `docs/risks.md` | Risk register — identified risks & mitigations | Phase 2 |
-| `docs/backlog.md` | Task backlog with granular tasks | Phase 3 |
-| `docs/progress.md` | Progress tracker — updated after every change | Phase 3 |
-| `docs/decisions.md` | Decision log for all choices made | Ongoing |
-| `docs/lessons.md` | Lessons learned — pitfalls and failures to avoid | Ongoing |
-| `CHANGELOG.md` | User-facing summary of what was built (lives in project root) | Ongoing |
+| Document              | Purpose                                                       | Created In |
+| --------------------- | ------------------------------------------------------------- | ---------- |
+| `docs/spec.md`        | Project requirements & specification                          | Phase 1    |
+| `docs/plan.md`        | Implementation plan & architecture                            | Phase 2    |
+| `docs/conventions.md` | Code style, naming, and project conventions                   | Phase 2    |
+| `docs/risks.md`       | Risk register — identified risks & mitigations                | Phase 2    |
+| `docs/backlog.md`     | Task backlog with granular tasks                              | Phase 3    |
+| `docs/progress.md`    | Progress tracker — updated after every change                 | Phase 3    |
+| `docs/decisions.md`   | Decision log for all choices made                             | Ongoing    |
+| `docs/lessons.md`     | Lessons learned — pitfalls and failures to avoid              | Ongoing    |
+| `CHANGELOG.md`        | User-facing summary of what was built (lives in project root) | Ongoing    |
 
 ---
 
@@ -54,21 +57,22 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 
 ### When to Use Sub-Agents
 
-| Situation | Action |
-|---|---|
-| Writing code for a task | Implement yourself OR delegate to **Implementer** |
-| Verifying / testing code you just wrote | **Always** delegate to **Tester** (separation of concerns) |
-| Completed a milestone or significant feature | Delegate to **Code Reviewer** |
-| Security-sensitive code (auth, payments, data handling) | Delegate to **Security Auditor** |
-| Setting up CI/CD, Docker, deployment | Delegate to **DevOps** |
-| README, API docs, or user-facing documentation | Delegate to **Documentation Writer** |
-| Complex architecture or design decisions | Delegate to **Architect** |
+| Situation                                               | Action                                                     |
+| ------------------------------------------------------- | ---------------------------------------------------------- |
+| Writing code for a task                                 | Implement yourself OR delegate to **Implementer**          |
+| Verifying / testing code you just wrote                 | **Always** delegate to **Tester** (separation of concerns) |
+| Completed a milestone or significant feature            | Delegate to **Code Reviewer**                              |
+| Security-sensitive code (auth, payments, data handling) | Delegate to **Security Auditor**                           |
+| Setting up CI/CD, Docker, deployment                    | Delegate to **DevOps**                                     |
+| README, API docs, or user-facing documentation          | Delegate to **Documentation Writer**                       |
+| Complex architecture or design decisions                | Delegate to **Architect**                                  |
 
 > **Key Principle:** The agent that writes code should NOT be the only one that verifies it. Always use a separate **Tester** sub-agent to review and verify implementations.
 
 ### Specialist Sub-Agent Roles
 
 #### 🏗️ Architect
+
 - **When:** Phase 2, or when a task requires significant design decisions
 - **Context to provide:** `docs/spec.md`, `docs/plan.md`, `docs/decisions.md`, relevant existing code structure
 - **Prompt template:**
@@ -76,6 +80,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Design document, diagrams, or decision recommendations
 
 #### 💻 Implementer
+
 - **When:** Phase 4, for complex implementation tasks that benefit from focused attention
 - **Context to provide:** `docs/plan.md`, `docs/conventions.md`, `docs/lessons.md` (relevant entries), relevant backlog task, existing code files related to the task
 - **Prompt template:**
@@ -83,6 +88,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Implementation code files
 
 #### 🧪 Tester
+
 - **When:** After EVERY implementation task (mandatory)
 - **Context to provide:** The implemented code, `docs/plan.md` (testing strategy section), `docs/lessons.md` (relevant entries), existing test files for patterns
 - **Prompt template:**
@@ -90,6 +96,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Test files, test execution results, list of any failures found
 
 #### 🔍 Code Reviewer
+
 - **When:** After each milestone, or after complex/security-sensitive tasks
 - **Context to provide:** All code changed in the milestone, `docs/spec.md`, `docs/plan.md`, `docs/decisions.md`
 - **Prompt template:**
@@ -97,6 +104,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Review report with categorized findings
 
 #### 🔒 Security Auditor
+
 - **When:** After implementing auth, payments, data handling, API endpoints, file uploads, or any user input handling
 - **Context to provide:** The security-relevant code, authentication/authorization logic, API routes, data validation code
 - **Prompt template:**
@@ -104,6 +112,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Security audit report
 
 #### 📖 Documentation Writer
+
 - **When:** After completing a milestone, or when API docs / README updates are needed
 - **Context to provide:** Implemented code, `docs/spec.md`, existing README, API routes
 - **Prompt template:**
@@ -111,6 +120,7 @@ You (the **Orchestrator**) should delegate specialized work to focused sub-agent
 - **Output expected:** Documentation files
 
 #### ⚙️ DevOps
+
 - **When:** Setting up CI/CD, Docker, deployment configs, or infrastructure
 - **Context to provide:** `docs/plan.md`, `package.json` or equivalent, existing config files
 - **Prompt template:**
@@ -151,12 +161,12 @@ When delegating to a sub-agent, follow this process:
 
 Certain sub-agent checks are **mandatory** (not optional):
 
-| Gate | Trigger | Required Sub-Agent | Blocking? |
-|---|---|---|---|
-| Post-Implementation Testing | After every task | 🧪 Tester | ✅ Yes — cannot proceed until tests pass |
-| Milestone Code Review | After completing a milestone | 🔍 Code Reviewer | ✅ Yes — must address 🔴 Must Fix items |
-| Security Audit | After auth, payments, data, APIs | 🔒 Security Auditor | ✅ Yes — must address Critical/High items |
-| Documentation Update | After completing a milestone | 📖 Documentation Writer | ⚠️ Recommended but not blocking |
+| Gate                        | Trigger                          | Required Sub-Agent      | Blocking?                                 |
+| --------------------------- | -------------------------------- | ----------------------- | ----------------------------------------- |
+| Post-Implementation Testing | After every task                 | 🧪 Tester               | ✅ Yes — cannot proceed until tests pass  |
+| Milestone Code Review       | After completing a milestone     | 🔍 Code Reviewer        | ✅ Yes — must address 🔴 Must Fix items   |
+| Security Audit              | After auth, payments, data, APIs | 🔒 Security Auditor     | ✅ Yes — must address Critical/High items |
+| Documentation Update        | After completing a milestone     | 📖 Documentation Writer | ⚠️ Recommended but not blocking           |
 
 ### Platforms Without Native Sub-Agent Support
 
@@ -174,15 +184,17 @@ If your platform does not support spawning sub-agents:
 Git is the backbone of session continuity and safe rollbacks. Follow these rules throughout the project.
 
 ### Repository Initialization
+
 - The very first task of the project (`M1-T1`) MUST include `git init` and creating a `.gitignore` appropriate for the tech stack.
 - If the repo already exists, do NOT re-initialize.
 
 ### Commit Rules
+
 - **Commit after every completed task** — not at the end of the session.
 - Use structured commit messages:
   ```
   [M1-T3] Add user authentication API endpoint
-  
+
   - Implemented POST /auth/login and POST /auth/register
   - Added JWT token generation and validation
   - Input validation with Zod schemas
@@ -191,6 +203,7 @@ Git is the backbone of session continuity and safe rollbacks. Follow these rules
 - Never commit broken or half-implemented code. If you must stop mid-task, use `git stash`.
 
 ### Branching Strategy (optional — ask user)
+
 - **Simple (default):** Work on `main`, commit after each task.
 - **Milestone branches:** Create `milestone/m1-setup`, merge to `main` after milestone approval.
 - **Feature branches:** Create `feature/m2-t3-auth-login` per task, merge after verification.
@@ -198,7 +211,9 @@ Git is the backbone of session continuity and safe rollbacks. Follow these rules
 Ask the user during Phase 2 if they prefer a branching strategy. Default to **Simple** for solo projects. Log the choice in `docs/decisions.md`.
 
 ### .gitignore
+
 Generate a `.gitignore` appropriate for the detected/chosen tech stack. Always include:
+
 - `node_modules/`, `__pycache__/`, `venv/`, `.env`, `dist/`, `build/`
 - OS files: `.DS_Store`, `Thumbs.db`
 - IDE files: `.vscode/settings.json` (but keep `.vscode/extensions.json` if relevant)
@@ -213,6 +228,7 @@ These are **universal minimums** that apply to every project unless the spec or 
 ### Code Quality
 
 **Structure & Readability**
+
 - Write small, focused functions/methods that do one thing.
 - Use meaningful, descriptive names for variables, functions, files, and classes. Avoid abbreviations unless they are universally understood (`id`, `url`, `config`).
 - Remove dead code. Do not leave commented-out code blocks "just in case" — that's what git history is for.
@@ -220,17 +236,20 @@ These are **universal minimums** that apply to every project unless the spec or 
 - Keep files focused. If a file exceeds ~300 lines, consider splitting it.
 
 **Error Handling**
+
 - Never silently swallow errors. At minimum, log them.
 - Use typed/custom errors where the language supports it, not generic error strings.
-- Provide helpful error messages that indicate *what went wrong* and *what the user/developer can do about it*.
+- Provide helpful error messages that indicate _what went wrong_ and _what the user/developer can do about it_.
 - Handle expected failure cases (network errors, invalid input, missing data) gracefully — don't just handle the happy path.
 
 **Input Validation**
+
 - Validate ALL external input: user input, API request bodies, URL parameters, file uploads, environment variables.
 - Validate at the boundary (where data enters the system), not deep inside business logic.
 - Use schema validation libraries where available (Zod, Joi, Pydantic, etc.) rather than hand-rolling validation.
 
 **Security Basics**
+
 - Never hardcode secrets, API keys, passwords, or tokens. Use environment variables.
 - Never log sensitive data (passwords, tokens, PII).
 - Use parameterized queries / ORM — never concatenate user input into SQL.
@@ -238,6 +257,7 @@ These are **universal minimums** that apply to every project unless the spec or 
 - Set appropriate CORS policies — never use `*` in production.
 
 **Performance Basics**
+
 - Don't make redundant API calls or database queries (cache, batch, or deduplicate where sensible).
 - Use pagination for any list endpoint or query that could return unbounded results.
 - Avoid loading entire datasets into memory. Stream or paginate large data.
@@ -246,11 +266,13 @@ These are **universal minimums** that apply to every project unless the spec or 
 ### UI/UX Quality (for projects with a user interface)
 
 **Layout & Responsiveness**
+
 - All UI must be responsive by default. Support at minimum: mobile (375px), tablet (768px), desktop (1280px).
 - Use a mobile-first approach unless the spec says otherwise.
 - Ensure content doesn't overflow, overlap, or become unreadable at any supported viewport.
 
 **Semantic HTML & Accessibility**
+
 - Use semantic HTML elements: `<nav>`, `<main>`, `<section>`, `<button>` (not `<div onclick>`).
 - All images must have `alt` attributes. Decorative images use `alt=""`.
 - All interactive elements must be keyboard accessible (Tab, Enter, Escape).
@@ -259,6 +281,7 @@ These are **universal minimums** that apply to every project unless the spec or 
 - Use ARIA attributes only when semantic HTML is insufficient.
 
 **UI States**
+
 - Every data-dependent view must handle ALL states:
   - ⏳ **Loading** — show skeleton, spinner, or placeholder (never a blank screen)
   - ✅ **Success** — display the data
@@ -268,12 +291,14 @@ These are **universal minimums** that apply to every project unless the spec or 
 - Form validation errors must appear inline next to the relevant field, not just as a toast/alert.
 
 **Navigation & Feedback**
+
 - Every user action must have visible feedback (success toast, redirect, state change).
 - Destructive actions (delete, cancel, remove) must require confirmation.
 - The user must always know where they are (active nav state, breadcrumbs, page titles).
 - Use consistent, predictable navigation patterns throughout the app.
 
 **Typography & Spacing**
+
 - Establish a consistent type scale and spacing system (use the framework's defaults or define in conventions).
 - Don't mix arbitrary pixel values — use a spacing scale (4px, 8px, 12px, 16px, 24px, 32px, 48px).
 - Ensure readable line lengths (45–75 characters for body text).
@@ -281,24 +306,27 @@ These are **universal minimums** that apply to every project unless the spec or 
 ### API Quality (for projects with API endpoints)
 
 **Consistency**
+
 - Use a consistent URL pattern: `plural nouns` for resources (`/users`, `/orders`), `kebab-case` for multi-word paths.
 - Use standard HTTP methods: `GET` (read), `POST` (create), `PUT/PATCH` (update), `DELETE` (remove).
 - Return appropriate status codes: `200`, `201`, `204`, `400`, `401`, `403`, `404`, `409`, `422`, `500`.
 
 **Error Responses**
+
 - Use a consistent error response format across ALL endpoints:
   ```json
   {
     "error": {
       "code": "VALIDATION_ERROR",
       "message": "Human-readable description",
-      "details": [ { "field": "email", "message": "Invalid email format" } ]
+      "details": [{ "field": "email", "message": "Invalid email format" }]
     }
   }
   ```
 - Never expose stack traces, internal paths, or system details in production error responses.
 
 **Pagination, Filtering & Limits**
+
 - All list endpoints must support pagination (cursor-based or offset-based).
 - Set sensible default and maximum page sizes.
 - Support filtering and sorting where the spec calls for it.
@@ -355,29 +383,42 @@ Before doing anything:
 # Project Specification
 
 ## Overview
+
 [Brief project description and goals]
 
 ## Target Users
+
 [Who will use this and how]
 
 ## Functional Requirements
+
 ### Must Have
+
 - [ ] ...
+
 ### Should Have
+
 - [ ] ...
+
 ### Could Have
+
 - [ ] ...
+
 ### Won't Have (this version)
+
 - ...
 
 ## Non-Functional Requirements
+
 - Performance: ...
 - Security: ...
 - Accessibility: ...
 - Browser/platform support: ...
 
 ## UI/UX Requirements (if applicable)
+
 [Project-specific design preferences, overrides to the Code Quality & UX Baseline]
+
 - Design system / component library: ...
 - Color palette / branding: ...
 - Accessibility level: [WCAG AA / WCAG AAA]
@@ -385,12 +426,15 @@ Before doing anything:
 - Target devices: ...
 
 ## Data Model
+
 [Key entities and their relationships]
 
 ## External Integrations
+
 [APIs, services, libraries]
 
 ## Constraints & Assumptions
+
 [Technical or business constraints]
 ```
 
@@ -419,27 +463,32 @@ Before doing anything:
 # Implementation Plan
 
 ## Tech Stack
-| Layer | Choice | Rationale |
-|---|---|---|
-| Language | ... | ... |
-| Framework | ... | ... |
-| Database | ... | ... |
-| Testing | ... | ... |
-| Styling | ... | ... |
+
+| Layer     | Choice | Rationale |
+| --------- | ------ | --------- |
+| Language  | ...    | ...       |
+| Framework | ...    | ...       |
+| Database  | ...    | ...       |
+| Testing   | ...    | ...       |
+| Styling   | ...    | ...       |
 
 ## Project Structure
+
 [Folder tree with descriptions]
 
 ## Architecture Overview
+
 [High-level architecture description and diagram if applicable]
 
 ## Testing Strategy
+
 - Unit tests: [approach & tools]
 - Integration tests: [approach & tools]
 - E2E tests: [approach & tools]
 - Verification method: [how to run all tests]
 
 ## Development Approach
+
 [Order of implementation, key milestones]
 ```
 
@@ -449,39 +498,44 @@ Before doing anything:
 # Project Conventions
 
 ## Naming
+
 - Files: [e.g., kebab-case for files, PascalCase for components]
 - Variables/functions: [e.g., camelCase]
 - Constants: [e.g., UPPER_SNAKE_CASE]
 - CSS classes: [e.g., BEM, Tailwind utility-first]
 
 ## File Organization
+
 - [e.g., Feature-based folders vs. type-based folders]
 - [e.g., Co-locate tests with source: `component.tsx` + `component.test.tsx`]
 
 ## Code Patterns
+
 - Error handling: [e.g., try/catch with custom error classes, Result types]
 - State management: [e.g., React Query for server state, Zustand for client state]
 - API layer: [e.g., Repository pattern, service classes]
 
 ## Commit Messages
+
 - Format: `[task ID] Short description`
 - See Git Workflow section for details
 
 ## Dependencies
+
 - See Dependency Evaluation Checklist before adding any new package
 ```
 
-   If the project already has an existing codebase, **derive conventions from the existing code** rather than imposing new ones. Document what you observe.
+If the project already has an existing codebase, **derive conventions from the existing code** rather than imposing new ones. Document what you observe.
 
 5. Identify technical risks and create `docs/risks.md`:
 
 ```markdown
 # Risk Register
 
-| ID | Risk | Likelihood | Impact | Mitigation | Status |
-|---|---|---|---|---|---|
-| R001 | [e.g., Third-party API rate limits] | Medium | High | [e.g., Implement caching layer and retry logic] | Open |
-| R002 | ... | ... | ... | ... | ... |
+| ID   | Risk                                | Likelihood | Impact | Mitigation                                      | Status |
+| ---- | ----------------------------------- | ---------- | ------ | ----------------------------------------------- | ------ |
+| R001 | [e.g., Third-party API rate limits] | Medium     | High   | [e.g., Implement caching layer and retry logic] | Open   |
+| R002 | ...                                 | ...        | ...    | ...                                             | ...    |
 ```
 
 6. Present the plan, conventions, and risks to the user and ask for approval before proceeding.
@@ -497,6 +551,7 @@ Before doing anything:
 ### Task Sizing Rules
 
 Each task MUST be:
+
 - **Completable in a single agent session** (one focused context window)
 - **Independently verifiable** — every task has a clear "done" condition
 - **Small enough** to implement AND test within the session
@@ -543,6 +598,7 @@ The remaining milestones cover actual features from the spec.
 # Task Backlog
 
 ## Milestone 1: Project Setup & Foundation
+
 - [ ] `M1-T1` — Repository init: git init, .gitignore, initial commit. **Verify:** `git status` shows clean repo
 - [ ] `M1-T2` — Project scaffold: [framework init]. **Verify:** Project files created, no errors
 - [ ] `M1-T3` — Dev environment: Start dev server. **Verify:** App responds at localhost
@@ -552,6 +608,7 @@ The remaining milestones cover actual features from the spec.
 - [ ] `M1-T7` — CI pipeline: [if applicable]. **Verify:** Pipeline runs green on push
 
 ## Milestone 2: [Name, e.g., "Core Feature X"]
+
 - [ ] `M2-T1` — ...
 ```
 
@@ -561,20 +618,24 @@ The remaining milestones cover actual features from the spec.
 # Progress Tracker
 
 ## Current Status
+
 - **Current Milestone:** M1 — [Name]
 - **Current Task:** Not started
 - **Last Updated:** [date]
 - **Last Session Summary:** N/A
 
 ## Completed Tasks
+
 [None yet]
 
 ## Blocked / Needs Decision
+
 [None yet]
 
 ## Session Log
+
 | Session | Date | Tasks Completed | Notes |
-|---|---|---|---|
+| ------- | ---- | --------------- | ----- |
 ```
 
 6. Present the backlog to the user and ask for approval before proceeding.
@@ -691,6 +752,7 @@ When something doesn't work and you need to debug, follow this structured approa
 ```
 
 **Anti-patterns to avoid:**
+
 - ❌ Changing multiple things at once ("shotgun debugging")
 - ❌ Rewriting large sections hoping the problem goes away
 - ❌ Ignoring the error message and guessing
@@ -712,29 +774,35 @@ You have a limited context window. Manage it proactively:
 **Every task must be verified before being marked complete.** Use the appropriate strategy:
 
 #### For backend / logic code:
+
 - Write unit tests alongside the implementation.
 - Run the tests and confirm they pass.
 - If a test fails, fix the code and re-run — do not mark complete until tests are green.
 
 #### For frontend / UI code:
+
 - Write E2E tests or component tests where possible.
 - Use browser automation (Playwright, Cypress, or similar) to verify UI behavior.
 - If browser automation is not set up yet, create a verification task first.
 - Visually verify by running the app and using the browser tool to inspect the result.
 
 #### For mobile / simulator code:
+
 - Use the simulator or emulator to verify the feature works.
 - Capture evidence (screenshots, logs) of the verification.
 
 #### For API endpoints:
+
 - Write integration tests that call the endpoint.
 - Verify correct responses, status codes, and error handling.
 
 #### General:
+
 - Run the full existing test suite after changes to ensure nothing is broken.
 - If you cannot verify a task automatically, explain why and describe the manual verification steps performed.
 
 #### Testing Pyramid Guidance:
+
 Choose the right level of testing for what you're verifying:
 
 ```
@@ -753,6 +821,7 @@ Choose the right level of testing for what you're verifying:
 **Heuristic:** If it has no side effects → unit test. If it crosses a boundary → integration test. If it's a critical user journey → E2E test.
 
 #### Sub-Agent Verification (preferred):
+
 - Delegate ALL verification to a **Tester sub-agent** — this ensures separation between writing and testing.
 - The Tester sub-agent should write tests independently based on the spec, not just confirm the implementation works.
 - If the Tester finds failures, return to implementation, fix, and re-delegate to the Tester.
@@ -764,18 +833,19 @@ Choose the right level of testing for what you're verifying:
 
 Before adding ANY new third-party package or library, evaluate it against this checklist:
 
-| Criterion | Check |
-|---|---|
-| **Necessity** | Can this be done with the language/framework's built-in features in reasonable time? |
-| **Maintenance** | Is the package actively maintained? (Last commit < 6 months, issues being addressed) |
-| **Popularity** | Does it have meaningful adoption? (Downloads, stars, community) |
-| **Size** | What's the bundle size / dependency tree impact? Avoid bloated packages for simple tasks. |
-| **License** | Is the license compatible with the project? (MIT, Apache 2.0 = safe. GPL = ask user.) |
-| **Duplicates** | Does the project already have a dependency that does the same thing? |
-| **Security** | Any known vulnerabilities? Check `npm audit` / `pip audit` / equivalent. |
-| **API stability** | Is it pre-1.0 or frequently making breaking changes? |
+| Criterion         | Check                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------- |
+| **Necessity**     | Can this be done with the language/framework's built-in features in reasonable time?      |
+| **Maintenance**   | Is the package actively maintained? (Last commit < 6 months, issues being addressed)      |
+| **Popularity**    | Does it have meaningful adoption? (Downloads, stars, community)                           |
+| **Size**          | What's the bundle size / dependency tree impact? Avoid bloated packages for simple tasks. |
+| **License**       | Is the license compatible with the project? (MIT, Apache 2.0 = safe. GPL = ask user.)     |
+| **Duplicates**    | Does the project already have a dependency that does the same thing?                      |
+| **Security**      | Any known vulnerabilities? Check `npm audit` / `pip audit` / equivalent.                  |
+| **API stability** | Is it pre-1.0 or frequently making breaking changes?                                      |
 
 **Rules:**
+
 - Prefer well-established packages over trendy newcomers.
 - Prefer smaller, focused packages over kitchen-sink libraries.
 - If two options are similar, pick the one already used or more consistent with the existing stack.
@@ -792,6 +862,7 @@ Before adding ANY new third-party package or library, evaluate it against this c
 # Decisions Log
 
 ## D001 — [Short Title]
+
 - **Date:** [date]
 - **Context:** [Why this decision was needed]
 - **Options Considered:**
@@ -814,15 +885,19 @@ Before adding ANY new third-party package or library, evaluate it against this c
 ## [Unreleased]
 
 ### Added
+
 - [Brief description of new feature or capability]
 
 ### Changed
+
 - [Brief description of change to existing functionality]
 
 ### Fixed
+
 - [Brief description of bug fix]
 
 ### Removed
+
 - [Brief description of removed feature]
 ```
 
@@ -833,6 +908,7 @@ When the user decides to tag a release, move "Unreleased" items under a versione
 ## Risk Register Maintenance
 
 Review `docs/risks.md` at the start of each session and after completing each milestone. Update:
+
 - **Status**: Open → Mitigated → Closed
 - **New risks** discovered during implementation
 - **Likelihood/Impact** adjustments based on progress
@@ -859,6 +935,7 @@ If a risk materializes, log it as a blocker in `docs/progress.md` and ask the us
 # Lessons Learned
 
 ## L001 — [Short descriptive title]
+
 - **Date:** [date]
 - **Task:** [task ID, e.g., M2-T3]
 - **What was attempted:** [Describe the approach that was tried]
@@ -868,6 +945,7 @@ If a risk materializes, log it as a blocker in `docs/progress.md` and ask the us
 - **Tags:** [e.g., `database`, `auth`, `CSS`, `deployment`, `testing`, `dependency`]
 
 ## L002 — [Next lesson]
+
 ...
 ```
 
@@ -950,10 +1028,10 @@ Environment variables are a common source of "works on my machine" failures acro
    ```
    # Database connection string (PostgreSQL)
    DATABASE_URL=postgresql://user:password@localhost:5432/mydb
-   
+
    # JWT secret for authentication tokens (generate a random 256-bit key)
    JWT_SECRET=your-secret-here
-   
+
    # Third-party API key for [service name]
    STRIPE_API_KEY=sk_test_...
    ```
@@ -990,32 +1068,32 @@ When ending a session (running out of context, completing available tasks, or se
 
 ## Rules Summary
 
-| Rule | Description |
-|---|---|
-| 🚫 No skipping phases | Complete each phase and get approval |
-| 🔄 Always update progress | After every task, not just end of session |
-| ❓ Ask, don't assume | Surface decisions to the user |
-| ✅ Verify everything | Tests or browser/simulator verification |
-| ✅ Definition of Done | Every task must pass the DoD checklist |
-| 📝 Document decisions | Every choice goes in decisions.md |
-| 🔗 Session continuity | Read all docs at session start |
-| 🧩 Small tasks | Each task fits in one session |
-| ☝️ One task at a time | Fully complete one task before starting the next |
-| ⏪ Rollback, don't pile on | Revert broken code before re-attempting |
-| 🔬 Debug systematically | Reproduce → Isolate → Hypothesize → Fix → Confirm |
-| 📊 Track risks | Maintain and review risks.md |
-| 📋 Keep a changelog | Update CHANGELOG.md for user-facing changes |
-| ⏳ Watch your context | Start handoff early, never get cut off mid-task |
-| 🤖 Delegate to specialists | Use sub-agents for testing, review, security, docs |
-| 🧪 Separate write from test | Never be the sole verifier of your own code |
-| 🔒 Mandatory quality gates | Tester after every task, Reviewer after milestones |
-| 🔀 Commit after every task | Structured git commits with task ID in message |
-| 🎯 Demo at milestones | Show working state, collect feedback, adjust backlog |
-| 📐 Follow conventions | Document & follow project conventions consistently |
-| 📦 Evaluate dependencies | Check the dependency checklist before adding packages |
-| 🏗️ Environment first | M1 must produce a runnable, testable, linted project |
-| 🔑 Manage env vars | Keep .env.example updated, validate at startup |
-| 🚧 Record every failure | Add to docs/lessons.md on every rollback or failed approach |
-| 📖 Learn before doing | Check lessons.md before starting any task |
-| 🧠 Teach sub-agents | Include relevant lessons.md entries in sub-agent context |
-| 🏁 Close the project | Run Phase 5 checklist before calling the project done |
+| Rule                        | Description                                                 |
+| --------------------------- | ----------------------------------------------------------- |
+| 🚫 No skipping phases       | Complete each phase and get approval                        |
+| 🔄 Always update progress   | After every task, not just end of session                   |
+| ❓ Ask, don't assume        | Surface decisions to the user                               |
+| ✅ Verify everything        | Tests or browser/simulator verification                     |
+| ✅ Definition of Done       | Every task must pass the DoD checklist                      |
+| 📝 Document decisions       | Every choice goes in decisions.md                           |
+| 🔗 Session continuity       | Read all docs at session start                              |
+| 🧩 Small tasks              | Each task fits in one session                               |
+| ☝️ One task at a time       | Fully complete one task before starting the next            |
+| ⏪ Rollback, don't pile on  | Revert broken code before re-attempting                     |
+| 🔬 Debug systematically     | Reproduce → Isolate → Hypothesize → Fix → Confirm           |
+| 📊 Track risks              | Maintain and review risks.md                                |
+| 📋 Keep a changelog         | Update CHANGELOG.md for user-facing changes                 |
+| ⏳ Watch your context       | Start handoff early, never get cut off mid-task             |
+| 🤖 Delegate to specialists  | Use sub-agents for testing, review, security, docs          |
+| 🧪 Separate write from test | Never be the sole verifier of your own code                 |
+| 🔒 Mandatory quality gates  | Tester after every task, Reviewer after milestones          |
+| 🔀 Commit after every task  | Structured git commits with task ID in message              |
+| 🎯 Demo at milestones       | Show working state, collect feedback, adjust backlog        |
+| 📐 Follow conventions       | Document & follow project conventions consistently          |
+| 📦 Evaluate dependencies    | Check the dependency checklist before adding packages       |
+| 🏗️ Environment first        | M1 must produce a runnable, testable, linted project        |
+| 🔑 Manage env vars          | Keep .env.example updated, validate at startup              |
+| 🚧 Record every failure     | Add to docs/lessons.md on every rollback or failed approach |
+| 📖 Learn before doing       | Check lessons.md before starting any task                   |
+| 🧠 Teach sub-agents         | Include relevant lessons.md entries in sub-agent context    |
+| 🏁 Close the project        | Run Phase 5 checklist before calling the project done       |

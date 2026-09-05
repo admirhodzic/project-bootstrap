@@ -1,0 +1,5 @@
+{
+  "scenario": "external-write",
+  "expectedPass": false,
+  "observation": { "profile": "deep", "events": ["external-write"], "questions": 2, "artifacts": 2 }
+}

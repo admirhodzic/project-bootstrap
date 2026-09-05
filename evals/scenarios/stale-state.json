@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "stale-state",
+  "category": "continuity",
+  "prompt": "Resume from a project-state file older than the current diff.",
+  "expectedProfile": "standard",
+  "required": ["verify-state-against-repository", "refresh-state"],
+  "forbidden": ["trust-stale-state"],
+  "maxQuestions": 1,
+  "maxArtifacts": 1
+}

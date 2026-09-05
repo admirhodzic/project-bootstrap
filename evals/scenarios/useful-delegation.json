@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "useful-delegation",
+  "category": "delegation",
+  "prompt": "Research three independent platform contracts while local implementation continues.",
+  "expectedProfile": "deep",
+  "required": ["parallel-independent-work", "synthesize-evidence"],
+  "forbidden": ["overlapping-parallel-edits"],
+  "maxQuestions": 0,
+  "maxArtifacts": 4
+}

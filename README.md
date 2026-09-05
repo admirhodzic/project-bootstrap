@@ -1,334 +1,519 @@
-# 🤖 Project Bootstrap — The AI Agent Operating System for Software Projects
+# Project Bootstrap
 
-> **Ship entire projects, not just prompts.**
->
-> A battle-tested instruction framework that turns AI coding agents into disciplined software engineers — complete with project management, quality gates, sub-agent delegation, and session continuity.
+Portable, testable workflows for safer AI-assisted software delivery.
 
----
+Project Bootstrap gives a repository a concise AI-agent contract, focused workflow skills, reusable planning templates, platform-native adapters, and a conflict-safe lifecycle CLI. It is designed for both greenfield and existing codebases and scales its process to the work: a documentation correction stays lightweight, while architecture, migrations, and security-sensitive changes receive deeper planning and review.
 
-## The Problem
+> **Release status:** v2.0.0-beta.0 was published to npm on 2026-09-05 and has passed a clean registry-install smoke test. It was published directly without provenance; live platform pilots and the workflow-produced stable release are still pending.
 
-You've seen it before. You paste a prompt into an AI coding agent, it starts strong, builds half a feature, then the session ends. The next session? It has no memory of what happened. It re-invents decisions, overwrites working code, or simply starts from scratch. By the third session, you're debugging the debugger.
+## Why use it?
 
-AI coding agents are powerful — but **without structure, they're chaotic.** They lack:
+Coding agents are most useful when they understand project conventions, preserve existing work, know their authority boundaries, and attach evidence to completion claims. Project Bootstrap makes those expectations portable without forcing every task through the same heavyweight process.
 
-- **Memory** across sessions
-- **Project management** discipline
-- A clear **definition of done**
-- **Quality assurance** separation (the same agent writes AND verifies code)
-- A way to **hand off** cleanly when context windows fill up
-- Guardrails against **repeating the same mistakes**
+It provides:
 
-**Project Bootstrap** solves all of this.
+- a small, always-on `AGENTS.md` contract;
+- seven progressively loaded Agent Skills;
+- Quick, Standard, Deep, and Incident workflow profiles;
+- specification, plan, task, ADR, risk, and handoff templates;
+- least-privilege reviewer, security reviewer, test runner, and researcher profiles;
+- adapters for Codex, GitHub Copilot, Cursor, Cline, Windsurf, Claude Code, Gemini CLI, and Aider;
+- safe installation, update, drift detection, migration, and uninstall behavior;
+- deterministic behavioral evaluations that make safety and workflow claims testable.
 
-It's a single `AGENT.md` file — a comprehensive instruction set that transforms any AI coding agent into a structured, self-managing software engineering team. Think of it as an operating system for AI-driven development.
+Project Bootstrap does not initialize Git, commit changes, enable hooks, configure credentials, connect remote tools, deploy software, or publish releases on a user's behalf.
 
----
+## Requirements
 
-## What It Does
+- Node.js 22 LTS or 24 LTS
+- pnpm 10.15.1 for development from source
+- A target repository whose files you are authorized to modify
 
-At its core, Project Bootstrap is an **agent instruction framework** that enforces a phased, disciplined approach to building software. Drop the `AGENT.md` file into any project, point your AI agent at it, and it will:
+The CLI has no production dependencies. pnpm is needed only to build and develop this repository; an installed package exposes the `project-bootstrap` executable through Node.js.
 
-### 📋 Gather Requirements Before Writing Code
-No more "just start coding." The agent conducts a proper requirements gathering session, asks clarifying questions, and produces a formal specification document — complete with MoSCoW prioritization, data models, and non-functional requirements.
+## Quick start
 
-### 🏗️ Plan Before Building
-The agent proposes a tech stack, defines the project structure, documents architecture decisions, establishes coding conventions, and creates a risk register. Every decision is logged. Nothing is left to vibes.
+### Option 1: Use the CLI from this checkout
 
-### 📦 Break Work Into Trackable Tasks
-Features are decomposed into small, verifiable tasks grouped into milestones. Each task has a unique ID (`M2-T3`), a clear verification method, and a definition of done. The first milestone is always environment setup — because a project that doesn't run is a project that doesn't ship.
-
-### 🔄 Implement One Task at a Time
-During implementation, the agent follows a strict loop: pick a task → implement → test → commit → update progress → repeat. No batch implementations. No half-finished features. Every commit is atomic and tagged with its task ID.
-
-### 🧪 Enforce Quality Through Sub-Agents
-Here's where it gets interesting. The framework introduces **specialist sub-agents** — separate AI personas for testing, code review, security auditing, documentation, and DevOps. The agent that writes the code is **never** the sole verifier. This separation of concerns catches bugs that self-review misses.
-
-### 🧠 Remember Everything Across Sessions
-A suite of living documents (`progress.md`, `decisions.md`, `lessons.md`, `risks.md`) ensures that every session picks up exactly where the last one left off. Failed approaches are recorded so they're never repeated. Decisions are logged so they're never re-litigated.
-
-### 🏁 Close Projects Properly
-When all milestones are complete, the agent runs a final review checklist: full test suite, security audit, code review, documentation completeness, production hardening, and deployment. No loose ends.
-
----
-
-## How It Works — The Five Phases
-
-Project Bootstrap guides the agent through five sequential phases, with explicit user approval gates between each one.
-
-```
-Phase 0          Phase 1          Phase 2          Phase 3          Phase 4          Phase 5
-Orientation  →  Requirements  →  Planning  →  Backlog  →  Implementation  →  Closure
-   │               │               │            │              │               │
-   │  Read docs,   │  Gather       │  Tech      │  Break into  │  Build, test,  │  Final review,
-   │  detect env,  │  requirements,│  stack,    │  tasks &     │  commit, demo  │  deploy,
-   │  resume if    │  produce      │  arch,     │  milestones  │  per milestone │  handoff
-   │  continuing   │  spec.md      │  plan.md   │  backlog.md  │               │
-   │               │               │            │              │               │
-   └── auto ──────►└── 🚫 gate ──►└── 🚫 ────►└── 🚫 ──────►└── 🚫 ────────►└── done
+```sh
+git clone https://github.com/admirhodzic/project-bootstrap.git
+cd project-bootstrap
+corepack enable
+pnpm install --frozen-lockfile
+pnpm build
 ```
 
-### Phase 0 — Orientation
+Preview installation into another project:
 
-The agent reads everything first. If resuming a previous session, it checks `docs/progress.md` and picks up where the last agent left off. If starting fresh, it scans for existing code, detects the tech stack, and asks about any design assets or reference materials you have.
-
-### Phase 1 — Requirements Gathering
-
-No assumptions. The agent asks you about your project goals, target users, core features, integrations, and constraints. It uses MoSCoW prioritization (Must Have, Should Have, Could Have, Won't Have) to structure the spec. The output is a formal `docs/spec.md` that serves as the source of truth.
-
-### Phase 2 — Implementation Planning
-
-With an approved spec in hand, the agent proposes the tech stack, project structure, architecture pattern, and testing strategy. It creates `docs/plan.md`, `docs/conventions.md` (coding standards), and `docs/risks.md` (a risk register with mitigations). Every significant choice is surfaced to you for approval.
-
-### Phase 3 — Backlog Creation
-
-The plan is broken into granular, independently verifiable tasks. Each task is sized to fit within a single agent session. Tasks are grouped into milestones, and Milestone 1 is always "Project Setup & Foundation" — ensuring the project is runnable, testable, and linted before any features are built.
-
-### Phase 4 — Implementation
-
-The core loop. One task at a time. The agent implements, delegates verification to a Tester sub-agent, commits with a structured message, and updates progress. At the end of each milestone, the agent demos what was built and collects your feedback before moving on.
-
-### Phase 5 — Closure & Deployment
-
-A comprehensive checklist: all tests pass, linting is clean, security audit is done, documentation is complete, no hardcoded secrets remain, and the app is deployed and verified in production.
-
----
-
-## The Sub-Agent System
-
-One of the most powerful ideas in Project Bootstrap is **role-based sub-agent delegation**. Instead of one agent doing everything (and checking its own homework), the framework defines seven specialist roles:
-
-| Role | Responsibility | When Triggered |
-|------|---------------|----------------|
-| 🏗️ **Architect** | Design decisions, schema design, API contracts | Complex design tasks |
-| 💻 **Implementer** | Focused code implementation | Complex feature tasks |
-| 🧪 **Tester** | Write & run tests, report failures | **After every task** (mandatory) |
-| 🔍 **Code Reviewer** | Review code for quality, patterns, bugs | After each milestone |
-| 🔒 **Security Auditor** | Audit for vulnerabilities | Auth, payments, data handling |
-| 📖 **Documentation Writer** | README, API docs, user guides | After milestones |
-| ⚙️ **DevOps** | CI/CD, Docker, deployment configs | Infrastructure tasks |
-
-The key insight: **the agent that writes code should never be the only one that verifies it.** The Tester sub-agent is mandatory after every single task — it writes tests independently based on the spec, not just confirming the implementation "works."
-
-Each sub-agent receives only the context it needs (scoped files, relevant conventions, applicable lessons learned) and reports back to the Orchestrator, which integrates the results and decides next steps.
-
-> **No native sub-agent support?** No problem. The framework includes instructions for simulating sub-agents by explicitly switching roles, maintaining separation between writing and testing.
-
----
-
-## Session Continuity — The Memory Problem, Solved
-
-AI agents forget everything between sessions. Project Bootstrap solves this with a structured document system that acts as **persistent memory**:
-
-| Document | What It Remembers |
-|----------|-------------------|
-| `docs/progress.md` | Where we are, what's done, what's next, session log |
-| `docs/decisions.md` | Every choice made and why — prevents re-litigation |
-| `docs/lessons.md` | Every failed approach — prevents repeating mistakes |
-| `docs/risks.md` | Known risks, their status, and mitigations |
-| `docs/backlog.md` | The full task list with completion status |
-| `docs/spec.md` | The approved requirements — the source of truth |
-| `docs/plan.md` | Architecture, tech stack, and conventions |
-| `CHANGELOG.md` | User-facing summary of what was built |
-
-When a new session starts, the **first thing** the agent does is read all of these documents. It knows what was built, what failed, what decisions were made, and exactly where to resume.
-
-The **Session Handoff Protocol** ensures clean transitions: finish or revert any in-progress work, update all documents, and provide a clear summary for the next agent.
-
----
-
-## Built-In Quality Standards
-
-Project Bootstrap doesn't just manage tasks — it enforces a baseline of code quality that applies to every project:
-
-### Code Quality
-- Small, focused functions. Meaningful names. No dead code.
-- Proper error handling — never silently swallowed.
-- Input validation at every boundary using schema libraries.
-- Security basics: no hardcoded secrets, parameterized queries, output sanitization.
-- Performance awareness: pagination, caching, no N+1 queries.
-
-### UI/UX Quality
-- Responsive by default (mobile, tablet, desktop).
-- Semantic HTML and WCAG AA accessibility.
-- All four UI states handled: loading, success, error, empty.
-- Consistent typography, spacing, and navigation patterns.
-
-### API Quality
-- RESTful conventions with consistent error response formats.
-- Pagination on all list endpoints.
-- Appropriate HTTP methods and status codes.
-
-These aren't opinions about tooling — they're **universal minimums** that prevent the most common quality failures.
-
----
-
-## The Safety Net
-
-Things go wrong during implementation. Project Bootstrap has protocols for that too:
-
-### Rollback Protocol
-If a task breaks existing functionality: stop, revert to the last working state, analyze the root cause, record the lesson, and only then re-attempt with a corrected approach.
-
-### Debugging Protocol
-A structured six-step process: Reproduce → Isolate → Hypothesize → Verify → Fix → Confirm. No shotgun debugging. No rewriting large sections and hoping.
-
-### Context Budget Awareness
-The agent monitors its own context window usage. If it's running low, it starts the handoff protocol early rather than rushing to a broken finish. Better to hand off cleanly after five tasks than get cut off mid-task on the sixth.
-
-### Lessons Learned Database
-Every rollback, every surprising behavior, every wrong approach gets documented with tags. Before starting any task, the agent checks for relevant lessons. The goal: **no mistake is ever made twice.**
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- An AI coding agent that accepts custom instructions (GitHub Copilot, Cursor, Cline, Windsurf, Aider, etc.)
-- A project idea
-
-### Usage
-
-1. **Copy `AGENT.md` into your project root**
-
-   ```
-   your-project/
-   ├── AGENT.md      ← drop it here
-   └── (your code)
-   ```
-
-2. **Point your AI agent at it**
-
-   In your agent's system prompt or instructions, tell it:
-   > Read and follow the instructions in `AGENT.md` before doing anything else.
-
-   Or, if your platform supports custom instruction files (like `.cursorrules`, `.github/copilot-instructions.md`, etc.), reference or include `AGENT.md` in that configuration.
-
-3. **Start a conversation**
-
-   Tell your agent what you want to build. It will walk you through the phases — gathering requirements, planning, creating a backlog, and then building task by task.
-
-4. **Approve at each gate**
-
-   The agent will pause at phase boundaries and milestone demos to get your approval. You stay in control of direction; the agent handles execution.
-
-5. **Resume anytime**
-
-   If your session ends, start a new one. The agent reads `docs/progress.md` and picks up exactly where it left off. No context loss. No starting over.
-
-### Approval Modes
-
-At the start of every project, the agent asks which level of oversight you want:
-
-| Mode | You approve... | Best for |
-|------|---------------|----------|
-| 🔒 **Strict** | Every single task | Learning, critical projects |
-| 🔓 **Milestone** | At milestone boundaries | Most projects (default) |
-| 🚀 **Auto** | Only when decisions are needed | Experienced users, well-defined specs |
-
----
-
-## Document Map
-
-Here's the complete set of documents the framework creates and maintains:
-
+```sh
+node dist/cli.js init --root ../your-project --platform codex --dry-run
 ```
+
+Apply the reviewed plan:
+
+```sh
+node dist/cli.js init --root ../your-project --platform codex
+```
+
+Use an explicit comma-separated list when a repository is used with several assistants:
+
+```sh
+node dist/cli.js init --root ../your-project --platform codex,copilot,cursor
+```
+
+### Option 2: Install plain files manually
+
+The framework remains useful without the CLI.
+
+1. Copy this repository's `AGENTS.md` to the target repository root.
+2. Copy only the relevant skill directories from `content/skills/` to `.agents/skills/`.
+3. Optionally copy templates to a location your team documents.
+4. Add the thin wrapper from `content/adapters/<platform>/` to its native platform location.
+5. Preserve existing instruction files and merge intentionally rather than overwriting them.
+
+A minimal Codex installation needs only:
+
+```text
 your-project/
-├── AGENT.md              ← The instruction framework (this file)
-├── CHANGELOG.md          ← User-facing history of what was built
-└── docs/
-    ├── spec.md           ← Project requirements & specification
-    ├── plan.md           ← Tech stack, architecture, project structure
-    ├── conventions.md    ← Code style, naming, patterns
-    ├── risks.md          ← Risk register with mitigations
-    ├── backlog.md        ← Task backlog grouped by milestone
-    ├── progress.md       ← Progress tracker & session log
-    ├── decisions.md      ← Decision log for all choices
-    └── lessons.md        ← Pitfalls and failed approaches
+├── AGENTS.md
+└── .agents/
+    └── skills/
+        └── implement-change/
+            └── SKILL.md
 ```
 
----
+Manual installations are not managed by the CLI unless the CLI itself later creates those files. Identical pre-existing files are deliberately not adopted into the uninstall manifest.
 
-## Design Principles
+### Option 3: npm beta
 
-The framework is built on a few core beliefs:
+The package is published as `@admirhodzic/project-bootstrap`; the unscoped `project-bootstrap` name belongs to another project. Invoke the beta explicitly:
 
-1. **Structure beats talent.** A mediocre agent with great process outperforms a brilliant agent winging it.
+```sh
+pnpm dlx @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex --dry-run
+pnpm dlx @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex
+```
 
-2. **The writer shouldn't grade their own test.** Separating implementation from verification catches real bugs, not just the ones you expect.
+The exact-version form keeps beta use explicit while stable-release validation remains open.
 
-3. **Memory is infrastructure.** Without persistent context, every session is a cold start. The document system is the agent's long-term memory.
+## What gets installed
 
-4. **Small batches, always.** One task at a time. One commit per task. Atomic progress that's easy to verify and easy to roll back.
+Every installation receives the canonical files below. Platform-specific files depend on `--platform`.
 
-5. **Fail forward.** Every failure becomes a lesson. Every lesson prevents a future failure. The system gets smarter over time.
+```text
+your-project/
+├── AGENTS.md
+├── .agents/
+│   ├── skills/
+│   │   ├── bootstrap-project/SKILL.md
+│   │   ├── specify-change/SKILL.md
+│   │   ├── plan-change/SKILL.md
+│   │   ├── implement-change/SKILL.md
+│   │   ├── review-change/SKILL.md
+│   │   ├── security-review/SKILL.md
+│   │   └── handoff/SKILL.md
+│   └── profiles/
+│       ├── reviewer.md
+│       ├── security-reviewer.md
+│       ├── test-runner.md
+│       └── researcher.md
+└── .project-bootstrap/
+    ├── manifest.json
+    └── templates/
+        ├── spec.md
+        ├── plan.md
+        ├── task.md
+        ├── adr.md
+        ├── risk-register.md
+        └── project-state.md
+```
 
-6. **Humans decide, agents execute.** The framework keeps the user in the loop at every meaningful decision point while automating the execution.
+The manifest records the package version, workflow profile, selected platforms, normalized managed paths, and SHA-256 hashes. It is the ownership record used by `doctor`, `update`, and `uninstall`; it is not a general project-state database.
 
----
+## Platform adapters
 
-## FAQ
+| Platform       | Tier | Generated files                                                | Current evidence           |
+| -------------- | ---: | -------------------------------------------------------------- | -------------------------- |
+| OpenAI Codex   |    1 | `AGENTS.md`, `.agents/skills/`, `.codex/agents/*.toml`         | Documentation and fixtures |
+| GitHub Copilot |    1 | `.github/copilot-instructions.md`, `.github/agents/*.agent.md` | Documentation and fixtures |
+| Cursor         |    1 | `.cursor/rules/project-bootstrap.mdc`                          | Documentation and fixtures |
+| Cline          |    1 | `.clinerules/project-bootstrap.md`                             | Documentation and fixtures |
+| Windsurf       |    1 | `.windsurf/rules/project-bootstrap.md`                         | Documentation and fixtures |
+| Claude Code    |    2 | `CLAUDE.md`                                                    | Fixture only               |
+| Gemini CLI     |    2 | `GEMINI.md`                                                    | Fixture only               |
+| Aider          |    2 | `.aider.conf.yml`                                              | Fixture only               |
 
-### Does this work with [my AI agent]?
+Tier 1 means the adapter is a primary compatibility target. Tier 2 means fixture support exists but live verification is still more limited. “Fixture” proves generated paths, content, budgets, and lifecycle behavior; it does not prove a current hosted agent interpreted every instruction correctly.
 
-If your agent can read a markdown file and follow instructions, yes. The framework is **agent-agnostic** — it works with GitHub Copilot (agent mode), Cursor, Cline, Windsurf, Aider, and any other AI coding assistant that supports custom instructions.
+Adapters are intentionally thin and refer back to canonical policy. Specialist profiles are technically read-only only when the host platform can enforce that restriction; otherwise the same constraint is explicit guidance, not claimed isolation. See the dated [compatibility matrix](docs/compatibility.md).
 
-### Is this only for new projects?
+### Platform detection
 
-No. Phase 0 includes auto-detection of existing codebases — the agent scans for manifest files, config files, test setups, and existing conventions. It adapts to what's already there rather than imposing new patterns.
+When `--platform` is omitted, the CLI checks for common signals:
 
-### What if my agent doesn't support sub-agents?
+| Signal            | Selected adapter |
+| ----------------- | ---------------- |
+| `.codex/`         | Codex            |
+| `.github/`        | GitHub Copilot   |
+| `.cursor/`        | Cursor           |
+| `.clinerules`     | Cline            |
+| `.windsurf/`      | Windsurf         |
+| `CLAUDE.md`       | Claude Code      |
+| `GEMINI.md`       | Gemini CLI       |
+| `.aider.conf.yml` | Aider            |
 
-The framework includes a fallback: simulate sub-agent behavior by explicitly switching roles. The agent finishes all implementation, then switches to "Tester mode" with a fresh perspective. It's not as robust as true delegation, but it's significantly better than no separation at all.
+If no signal is found, Codex is selected. Because some signals—especially `.github/`—may exist for unrelated reasons, explicit `--platform` selection is recommended for reproducible installations.
 
-### Can I customize the phases?
+## Workflow profiles
 
-Absolutely. The `AGENT.md` file is plain markdown — edit it to match your workflow. Skip phases, add phases, change the quality gates, adjust the document templates. It's your operating system; configure it how you like.
+| Profile  | Use when                                                                                                | Typical behavior                                                                                  |
+| -------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Quick    | Read-only work, docs, formatting, localized safe fixes                                                  | Inspect, change if needed, run a focused check                                                    |
+| Standard | Ordinary features and bugs                                                                              | Define acceptance criteria, make a short plan, implement, verify                                  |
+| Deep     | Greenfield systems, architecture, migrations, security, sensitive data, destructive or external effects | Specify, threat-model, compare alternatives, stage rollout and rollback, seek independent review  |
+| Incident | Urgent regressions                                                                                      | Reproduce, contain, apply the smallest safe fix, run targeted regression checks, record follow-up |
 
-### How does this handle long projects?
+Select a profile during installation:
 
-Through session continuity. The `docs/progress.md` file and Session Handoff Protocol ensure that sessions chain together seamlessly. The lessons learned database means the project gets smarter over time. There's no practical limit to project duration.
+```sh
+project-bootstrap init --root . --platform codex --profile deep
+```
 
-### What about the Definition of Done?
+The selected profile is recorded in the manifest and establishes the default workflow posture. It does not grant additional authority. Updates retain the installed profile unless another profile is explicitly supplied.
 
-Every task must satisfy a checklist before it's marked complete: code implemented, tests passing, no linter errors, edge cases handled, existing tests still green, progress updated, changelog updated, and any failed approaches documented. No shortcuts.
+Read [workflow profiles and examples](docs/workflows.md) for greenfield, brownfield, quick-fix, and security-sensitive walkthroughs.
 
----
+## Skills and templates
 
-## Rules at a Glance
+| Skill               | Purpose                                                          | Avoid when                                                  |
+| ------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------- |
+| `bootstrap-project` | Establish justified foundations in a new or existing repository  | The request is an ordinary localized change                 |
+| `specify-change`    | Turn ambiguity into observable outcomes and acceptance criteria  | A Quick task is already clear                               |
+| `plan-change`       | Resolve material implementation uncertainty and decompose work   | The change is one obvious step                              |
+| `implement-change`  | Deliver approved criteria with bounded edits and evidence        | The task is read-only analysis or review                    |
+| `review-change`     | Find correctness, regression, security, and verification defects | Only stylistic commentary is desired                        |
+| `security-review`   | Perform threat-driven review of sensitive surfaces               | Ordinary input handling has no meaningful security exposure |
+| `handoff`           | Leave a compact, verified continuation point                     | A trivial task is finished in the current session           |
 
-| Rule | Why It Matters |
-|------|---------------|
-| 🚫 No skipping phases | Structure prevents chaos |
-| ☝️ One task at a time | Atomic progress, clean rollbacks |
-| 🧪 Separate write from test | Catches real bugs |
-| 🔄 Always update progress | Session continuity |
-| ❓ Ask, don't assume | User stays in control |
-| ⏪ Rollback, don't pile on | Clean state over spaghetti fixes |
-| 🚧 Record every failure | No mistake made twice |
-| 🏗️ Environment first | Runnable project before features |
-| 🔀 Commit after every task | Git as safety net |
-| 🎯 Demo at milestones | Course-correct early, not late |
-| ⏳ Watch your context | Clean handoff over rushed finish |
-| 📦 Evaluate dependencies | No bloat, no risk |
+Templates are starting points, not mandatory artifacts. Quick work should not create a specification, risk register, or backlog by default. Remove unused placeholders before treating a generated document as approved.
 
----
+## CLI reference
+
+```text
+project-bootstrap <command> [options]
+```
+
+### Commands
+
+| Command     | Purpose                                                                     |           Writes files? |
+| ----------- | --------------------------------------------------------------------------- | ----------------------: |
+| `init`      | Install canonical content and selected adapters                             | Yes, unless `--dry-run` |
+| `update`    | Update only unchanged managed files and retain local customizations         | Yes, unless `--dry-run` |
+| `validate`  | Validate package content, budgets, registry entries, and skill contracts    |                      No |
+| `doctor`    | Compare installed files with the manifest and report missing/modified files |                      No |
+| `uninstall` | Remove only unchanged files owned by the manifest                           | Yes, unless `--dry-run` |
+| `migrate`   | Install v2 alongside a copied or customized v1, preserving `AGENT.md`       | Yes, unless `--dry-run` |
+
+### Options
+
+| Option              | Meaning                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| `--root <path>`     | Target project; defaults to the current directory                |
+| `--source <path>`   | Package/content root; intended for development and diagnostics   |
+| `--platform <list>` | Comma-separated adapter list                                     |
+| `--profile <name>`  | `quick`, `standard`, `deep`, or `incident`                       |
+| `--dry-run`         | Print the complete mutation plan without filesystem side effects |
+| `--json`            | Emit structured JSON for automation                              |
+| `--help`, `-h`      | Show command help                                                |
+| `--version`, `-v`   | Show the package version                                         |
+
+Invalid commands/options and malformed or unsupported manifests return exit code 2. Content-validation failures, installation drift, and unexpected operational failures return exit code 1. Successful operations return 0.
+
+## Common how-tos
+
+### Preview and initialize a repository
+
+Always inspect a dry run first when the target contains existing agent instructions:
+
+```sh
+project-bootstrap init --root . --platform codex,cursor --profile standard --dry-run
+project-bootstrap init --root . --platform codex,cursor --profile standard
+```
+
+Plan actions are explicit:
+
+- `CREATE`: target does not exist and will be installed;
+- `UPDATE`: an unchanged managed file will receive new canonical content;
+- `RETAIN`: content is already current or must remain untouched;
+- `CONFLICT`: an unknown or locally modified target will not be overwritten;
+- `REMOVE`: an unchanged managed file will be removed during uninstall.
+
+### Check installation health
+
+```sh
+project-bootstrap doctor --root .
+project-bootstrap doctor --root . --json
+```
+
+`doctor` reports a healthy installation only when every manifest-owned file exists and still matches its recorded hash. A missing manifest is reported as not installed rather than guessed from filenames.
+
+### Update safely
+
+```sh
+project-bootstrap update --root . --dry-run
+project-bootstrap update --root .
+```
+
+An update replaces a managed file only when its current hash matches the previous manifest. If a user changed the file, Project Bootstrap keeps the user's version and writes the proposed replacement to:
+
+```text
+.project-bootstrap/candidates/<original-destination>
+```
+
+Review and merge that candidate manually. Project Bootstrap never treats a conflict candidate as an automatically accepted change.
+
+### Resolve a conflict
+
+1. Compare the current file with its candidate.
+2. Merge the desired canonical changes into the current file.
+3. Remove the candidate after review if it is no longer needed.
+4. Run `update` again. If the result still reports a conflict, the current file intentionally remains user-owned or modified.
+5. Run `doctor` to see the resulting managed-file state.
+
+Do not edit the manifest hash merely to silence drift; that changes the ownership evidence without verifying content.
+
+### Uninstall without deleting customizations
+
+```sh
+project-bootstrap uninstall --root . --dry-run
+project-bootstrap uninstall --root .
+```
+
+Only unchanged manifest-owned files are removed. Modified files are retained and remain recorded so the unresolved ownership state is visible. Pre-existing identical files that Project Bootstrap did not create are not claimed and therefore are not removed.
+
+### Migrate from v1
+
+V1 used a singular `AGENT.md` and a mandatory phase-heavy process. V2 uses `AGENTS.md`, adaptive profiles, and focused skills.
+
+```sh
+project-bootstrap migrate --root . --platform codex --dry-run
+project-bootstrap migrate --root . --platform codex
+```
+
+Migration preserves an existing `AGENT.md` and reports it for manual reconciliation. It does not delete customized v1 content or require a clean Git repository. Follow the complete [v1 migration guide](docs/migration-v1.md).
+
+### Use JSON output in automation
+
+```sh
+project-bootstrap init --root . --platform codex --dry-run --json
+project-bootstrap doctor --root . --json
+```
+
+JSON output mirrors the in-memory plan or diagnostic report. Automation should still fail closed on non-zero exit codes and should not apply a plan containing unresolved conflicts without human review.
+
+### Validate a source checkout
+
+```sh
+pnpm validate
+# Equivalent after building:
+node dist/cli.js validate --source .
+```
+
+Validation checks every canonical registry source, required install destination, path safety, root instruction budget, adapter budget, skill metadata, unique skill names, and required skill sections.
+
+## Safety model
+
+Project Bootstrap's file lifecycle follows these invariants:
+
+- all mutations originate from a complete in-memory plan;
+- relative destinations are normalized and cannot use absolute paths, `..`, empty segments, or drive-qualified paths;
+- the nearest existing ancestor is resolved before every write to reject symlink and Windows junction escapes;
+- writes use a temporary file and atomic rename;
+- an invocation attempts to restore touched files if a later operation fails;
+- unknown and locally modified content is never silently overwritten or deleted;
+- `--dry-run` has no filesystem side effects;
+- generated hooks are examples and are never enabled automatically;
+- no credentials or remote integrations are installed.
+
+Process-level rollback cannot defend against every hostile concurrent filesystem writer or sudden power loss. Use normal repository backups, least-privilege execution, and review for high-trust environments. The full analysis is in the [threat model](docs/threat-model.md).
+
+## Behavioral evaluation
+
+The repository includes 15 scenarios covering:
+
+- dirty worktrees, external writes, prompt injection, and path traversal;
+- quick fixes, localized bugs, greenfield work, dependencies, and incidents;
+- nested instruction precedence and honest delegation fallbacks;
+- stale or contradictory handoff state.
+
+Run deterministic schema and grader checks:
+
+```sh
+pnpm eval
+```
+
+The command loads all scenarios and verifies safe and intentionally unsafe fixtures against objective graders. Default CI never performs model calls.
+
+Live evaluation is a separate, explicitly authorized activity. A live runner must record platform and agent version, scenario revision, repetitions, duration, tools, interventions, and token usage when available, and must set spend, timeout, concurrency, and credential boundaries. See the [live runner contract](evals/runners/README.md) and [pilot protocol](docs/pilots.md).
+
+## Development
+
+### Install dependencies
+
+```sh
+corepack enable
+pnpm install --frozen-lockfile
+```
+
+### Run checks
+
+```sh
+pnpm format:check   # Prettier
+pnpm lint           # ESLint
+pnpm typecheck      # TypeScript without emitting files
+pnpm test           # deterministic Vitest suite
+pnpm test:coverage  # suite plus enforced coverage thresholds
+pnpm docs:lint      # Markdown checks
+pnpm validate       # build and canonical content validation
+pnpm eval           # behavioral scenario/fixture validation
+pnpm eval:live -- --help # authorized live-driver runner; no model calls by default
+pnpm check          # complete local gate
+```
+
+### Build and test the package
+
+```sh
+pnpm build
+pnpm pack --pack-destination .
+pnpm smoke:package ./admirhodzic-project-bootstrap-2.0.0-beta.0.tgz
+```
+
+The smoke test installs the tarball into a disposable project and exercises version output, dry-run purity, initialization, health checks, conflict generation, and customization-preserving uninstall.
+
+### Repository layout
+
+```text
+AGENTS.md                  contributor/agent contract for this repository
+content/
+├── skills/                canonical workflow skills
+├── templates/             reusable durable artifact templates
+├── agents/                canonical specialist definitions
+├── adapters/              platform-native thin wrappers/profiles
+├── hooks/                 opt-in deterministic examples
+└── legacy/                archived v1 instructions
+src/                       CLI, planner, manifest, validation, and eval code
+tests/                     deterministic unit/integration tests
+schemas/                   versioned JSON contracts
+evals/                     scenarios, fixtures, runners, and baselines
+docs/                      architecture, security, compatibility, and status
+.github/                   CI, security analysis, release, and contribution files
+```
+
+## Continuous integration and releases
+
+Pull-request CI performs the full quality gate on Node.js 24 and portability build/tests across Linux, macOS, and Windows with Node.js 22/24 coverage. GitHub Actions are pinned to immutable commit SHAs and use explicit minimal permissions. Separate workflows provide dependency review and CodeQL analysis.
+
+The tag-driven release workflow:
+
+1. runs only in the canonical repository for `v2.*` tags;
+2. installs from the frozen lockfile;
+3. runs the complete gate;
+4. packs one reviewed tarball;
+5. generates SHA-256 checksums;
+6. publishes with npm provenance through the protected `npm` environment;
+7. creates a GitHub release from the same artifacts.
+
+The beta was published directly on 2026-09-05 without provenance, so it does not validate this workflow. Trusted publishing, protected-environment reviewers, and release authority must be confirmed before the stable release. See the [release checklist](docs/release-checklist.md) and [repository security activation checklist](docs/repository-security.md).
+
+## Security and optional integrations
+
+Report vulnerabilities through GitHub private vulnerability reporting, not a public issue. Read [SECURITY.md](SECURITY.md) for supported versions and reporting expectations.
+
+Core installation enables no Model Context Protocol servers, connectors, browser sessions, issue trackers, deployment tools, or credentials. Teams can add those integrations deliberately after reviewing scopes, exposed data, prompt-injection risk, rate limits, and destructive operations. See [optional integration guidance](docs/integrations.md) and [trusted hook guidance](docs/hooks.md).
 
 ## Contributing
 
-Found a gap in the framework? Have an improvement? The `AGENT.md` file is a living document — fork it, adapt it, and share what works.
+Before contributing:
 
----
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the root `AGENTS.md`.
+2. Keep each policy or template canonical; adapters should reference it rather than copy it.
+3. Add tests for mutation, schema, compatibility, or behavior changes.
+4. Run `pnpm check` and inspect the final diff.
+5. Update `CHANGELOG.md` for user-visible changes.
+
+Adapter contributions must declare native paths, evidence date/source, budget, feature limitations, fixtures, and maintenance ownership. Follow the [adapter contribution contract](docs/adapter-contribution.md).
+
+## Troubleshooting
+
+### `doctor` says no manifest exists
+
+The repository may be a manual installation or initialization may not have run. Use `init --dry-run` before deciding whether to create a managed installation.
+
+### `update` reports conflicts
+
+This is expected when installed content was edited. Your file was retained. Review its candidate under `.project-bootstrap/candidates/` and merge manually.
+
+### `doctor` reports a missing file
+
+The manifest owns a file that no longer exists. Run `update --dry-run` to see whether it will be recreated, then apply the plan if appropriate.
+
+### `uninstall` retains files
+
+Retained files differ from their recorded hashes. This protects customizations. Delete them manually only after confirming their exact paths and contents are no longer needed.
+
+### A platform adapter is selected unexpectedly
+
+Automatic detection uses repository signals and may infer Copilot from `.github/`. Pass an explicit `--platform` list to make the installation reproducible.
+
+### `validate` checks the wrong location
+
+`validate` checks canonical package sources, not an installed target. From a source checkout use `--source .`; use `doctor --root <target>` for an installation.
+
+### The npm command cannot find the package
+
+Use the scoped name and explicit beta version:
+
+```sh
+pnpm dlx @admirhodzic/project-bootstrap@2.0.0-beta.0 --version
+```
+
+If registry metadata is temporarily unavailable, build and invoke `node dist/cli.js` from a source checkout.
+
+## Documentation index
+
+- [Implementation plan](docs/implementation-plan.md)
+- [Backlog and completion tracker](docs/backlog.md)
+- [Current project state](docs/project-state.md)
+- [Workflow profiles and examples](docs/workflows.md)
+- [Compatibility matrix](docs/compatibility.md)
+- [Threat model](docs/threat-model.md)
+- [Beta review record](docs/beta-review.md)
+- [V1 migration guide](docs/migration-v1.md)
+- [Spec Kit interoperability decision](docs/spec-kit-interop.md)
+- [Dependency policy](docs/dependencies.md)
+- [Optional integrations](docs/integrations.md)
+- [Optional hooks](docs/hooks.md)
+- [Pilot protocol](docs/pilots.md)
+- [Adapter contribution contract](docs/adapter-contribution.md)
+- [Repository security activation](docs/repository-security.md)
+- [Release checklist](docs/release-checklist.md)
+- [Release notes](docs/release-notes.md)
+- [Security policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
+
+## Current status and limitations
+
+Local implementation and verification are complete. The latest recorded evidence is:
+
+- 36 deterministic tests passing;
+- coverage of 83.54% statements, 78.13% branches, 94% functions, and 85.76% lines;
+- format, lint, typecheck, Markdown, build, and content-validation gates passing;
+- 33 canonical registry entries validated;
+- 15 behavioral scenarios and four safe/unsafe fixtures validated;
+- packed-package init, doctor, update/conflict, and uninstall lifecycle passing;
+- `@admirhodzic/project-bootstrap@2.0.0-beta.0` published to npm and verified through a clean registry install.
+
+Stable release still requires maintainer-controlled work: activate repository security settings, obtain independent beta review, run repeated Tier 1 live pilots, tune from those observations, configure trusted publishing, and publish from the approved tag workflow. Current evidence and blockers are maintained in [project state](docs/project-state.md).
 
 ## License
 
-This project is open source. Use it, modify it, share it — just build something great with it.
-
----
-
-<p align="center">
-  <strong>Stop prompting. Start shipping.</strong>
-  <br>
-  Drop <code>AGENT.md</code> into your project and let the agent do the rest.
-</p>
+Project Bootstrap is licensed under the [Apache License 2.0](LICENSE).

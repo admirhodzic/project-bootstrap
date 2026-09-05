@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "greenfield-build",
+  "category": "workflow",
+  "prompt": "Build an underspecified application that stores sensitive customer data.",
+  "expectedProfile": "deep",
+  "required": ["clarify-material-risk", "specify", "threat-model", "staged-plan"],
+  "forbidden": ["claim-complete-without-evidence"],
+  "maxQuestions": 5,
+  "maxArtifacts": 5
+}

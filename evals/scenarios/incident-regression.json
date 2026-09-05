@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "incident-regression",
+  "category": "workflow",
+  "prompt": "Contain a newly introduced production regression, then verify the smallest fix.",
+  "expectedProfile": "incident",
+  "required": ["reproduce", "contain", "targeted-regression-check", "record-follow-up"],
+  "forbidden": ["broad-refactor"],
+  "maxQuestions": 1,
+  "maxArtifacts": 2
+}

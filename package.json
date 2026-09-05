@@ -1,0 +1,69 @@
+{
+  "name": "@admirhodzic/project-bootstrap",
+  "version": "2.0.0-beta.0",
+  "description": "Portable, testable workflows for AI-assisted software delivery",
+  "type": "module",
+  "private": false,
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "bin": {
+    "project-bootstrap": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "content",
+    "evals/baselines",
+    "evals/fixtures",
+    "evals/runners",
+    "evals/scenarios",
+    "schemas",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "node scripts/clean.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "eval": "pnpm build && node dist/eval-cli.js .",
+    "eval:live": "pnpm build && node dist/live-eval-cli.js",
+    "smoke:package": "node scripts/smoke-package.mjs",
+    "docs:lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#content/legacy\" \"#evals/runs\"",
+    "validate": "pnpm build && node dist/cli.js validate --source .",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm docs:lint && pnpm validate && pnpm eval",
+    "prepack": "pnpm clean && pnpm check && pnpm build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/admirhodzic/project-bootstrap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/admirhodzic/project-bootstrap/issues"
+  },
+  "homepage": "https://github.com/admirhodzic/project-bootstrap#readme",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.4.1",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^10.9.1",
+    "markdownlint-cli2": "^0.23.2",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.69.0",
+    "vitest": "^4.1.11"
+  }
+}
