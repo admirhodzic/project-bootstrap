@@ -18,6 +18,7 @@ All notable changes to Project Bootstrap are documented here.
 - Made adjacent rigor profiles explicitly acceptable in scenarios where live evidence showed both choices were proportionate, while retaining exact profile assertions for canonical workflow-selection cases and mandatory safety outcomes.
 - Required parallel research results to be synthesized before action or handoff.
 - Recorded the first bounded Codex/Claude exploratory pilot, its provider-reported cost, limitations, and why it was not promoted to a stable baseline.
+- Reworked the README introduction and quick start to explain the repository-installed operating contract, distinguish it from an agent runtime, and lead with the published-package workflow.
 
 ### Security
 

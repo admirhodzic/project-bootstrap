@@ -1,16 +1,16 @@
 # Project Bootstrap
 
-Portable, testable workflows for safer AI-assisted software delivery.
+Install a shared, testable operating contract for AI coding agents in any software repository.
 
-Project Bootstrap gives a repository a concise AI-agent contract, focused workflow skills, reusable planning templates, platform-native adapters, and a conflict-safe lifecycle CLI. It is designed for both greenfield and existing codebases and scales its process to the work: a documentation correction stays lightweight, while architecture, migrations, and security-sensitive changes receive deeper planning and review.
+Project Bootstrap is a repository toolkit, not another agent runtime. It installs concise instructions, on-demand workflow skills, reusable templates, and thin platform adapters so Codex, Claude Code, and other coding assistants can work from the same project rules. A conflict-safe CLI manages those files without silently replacing local customizations.
 
-> **Release status:** v2.0.0-beta.0 was published to npm on 2026-09-05 and has passed a clean registry-install smoke test. It was published directly without provenance; live platform pilots and the workflow-produced stable release are still pending.
+Use it when you want agents to understand repository conventions, preserve existing work, ask before consequential actions, scale process to risk, and verify results before claiming completion. It works with greenfield and existing codebases and remains usable as plain Markdown without the CLI.
 
-## Why use it?
+> **Release status:** `2.0.0-beta.0` is available on npm and passed clean-install and lifecycle smoke tests. It was published directly without provenance. An exploratory Codex and Claude Code pilot informed the current rules, but a same-revision two-family pilot and workflow-produced stable release are still pending.
 
-Coding agents are most useful when they understand project conventions, preserve existing work, know their authority boundaries, and attach evidence to completion claims. Project Bootstrap makes those expectations portable without forcing every task through the same heavyweight process.
+## What it provides
 
-It provides:
+Project Bootstrap combines:
 
 - a small, always-on `AGENTS.md` contract;
 - seven progressively loaded Agent Skills;
@@ -21,7 +21,16 @@ It provides:
 - safe installation, update, drift detection, migration, and uninstall behavior;
 - deterministic behavioral evaluations that make safety and workflow claims testable.
 
-Project Bootstrap does not initialize Git, commit changes, enable hooks, configure credentials, connect remote tools, deploy software, or publish releases on a user's behalf.
+It does not proxy model calls or replace your coding assistant. It also does not initialize Git, commit changes, enable hooks, configure credentials, connect remote tools, deploy software, or publish releases on your behalf.
+
+## How it works
+
+1. Preview an installation for the target repository and selected assistants.
+2. Apply the plan to install `AGENTS.md`, relevant skills and templates, native adapter files, and an ownership manifest.
+3. Use your assistant normally. It discovers the repository contract and loads detailed skills only when the task warrants them.
+4. Use `doctor`, `update`, and `uninstall` to manage only files owned by the manifest; modified files are retained for manual reconciliation.
+
+The workflow is adaptive: a typo remains a Quick task, an ordinary feature uses Standard rigor, architecture or sensitive work uses Deep rigor, and a live regression uses Incident handling.
 
 ## Requirements
 
@@ -33,7 +42,38 @@ The CLI has no production dependencies. pnpm is needed only to build and develop
 
 ## Quick start
 
-### Option 1: Use the CLI from this checkout
+### Install the published beta
+
+From the repository you want to equip, preview the complete mutation plan:
+
+```sh
+npx --yes @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex --dry-run
+```
+
+If the plan is correct, apply it:
+
+```sh
+npx --yes @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex
+```
+
+Select every assistant used by the repository with a comma-separated list:
+
+```sh
+npx --yes @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex,claude
+```
+
+After installation, open the repository in the selected coding assistant and work normally. There is no Project Bootstrap daemon or required prompt wrapper; the assistant reads its native repository instructions.
+
+Check or safely update the installation later:
+
+```sh
+npx --yes @admirhodzic/project-bootstrap@2.0.0-beta.0 doctor --root .
+npx --yes @admirhodzic/project-bootstrap@2.0.0-beta.0 update --root . --dry-run
+```
+
+The scoped package name is required because the unscoped `project-bootstrap` package belongs to another project. The exact beta version keeps prerelease use explicit.
+
+### Build and use this checkout
 
 ```sh
 git clone https://github.com/admirhodzic/project-bootstrap.git
@@ -58,10 +98,10 @@ node dist/cli.js init --root ../your-project --platform codex
 Use an explicit comma-separated list when a repository is used with several assistants:
 
 ```sh
-node dist/cli.js init --root ../your-project --platform codex,copilot,cursor
+node dist/cli.js init --root ../your-project --platform codex,claude,cursor
 ```
 
-### Option 2: Install plain files manually
+### Install plain files manually
 
 The framework remains useful without the CLI.
 
@@ -83,17 +123,6 @@ your-project/
 ```
 
 Manual installations are not managed by the CLI unless the CLI itself later creates those files. Identical pre-existing files are deliberately not adopted into the uninstall manifest.
-
-### Option 3: npm beta
-
-The package is published as `@admirhodzic/project-bootstrap`; the unscoped `project-bootstrap` name belongs to another project. Invoke the beta explicitly:
-
-```sh
-pnpm dlx @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex --dry-run
-pnpm dlx @admirhodzic/project-bootstrap@2.0.0-beta.0 init --root . --platform codex
-```
-
-The exact-version form keeps beta use explicit while stable-release validation remains open.
 
 ## What gets installed
 
@@ -133,12 +162,12 @@ The manifest records the package version, workflow profile, selected platforms, 
 
 | Platform       | Tier | Generated files                                                | Current evidence           |
 | -------------- | ---: | -------------------------------------------------------------- | -------------------------- |
-| OpenAI Codex   |    1 | `AGENTS.md`, `.agents/skills/`, `.codex/agents/*.toml`         | Documentation and fixtures |
+| OpenAI Codex   |    1 | `AGENTS.md`, `.agents/skills/`, `.codex/agents/*.toml`         | Exploratory live pilot     |
 | GitHub Copilot |    1 | `.github/copilot-instructions.md`, `.github/agents/*.agent.md` | Documentation and fixtures |
 | Cursor         |    1 | `.cursor/rules/project-bootstrap.mdc`                          | Documentation and fixtures |
 | Cline          |    1 | `.clinerules/project-bootstrap.md`                             | Documentation and fixtures |
 | Windsurf       |    1 | `.windsurf/rules/project-bootstrap.md`                         | Documentation and fixtures |
-| Claude Code    |    2 | `CLAUDE.md`                                                    | Fixture only               |
+| Claude Code    |    2 | `CLAUDE.md`                                                    | Exploratory live pilot     |
 | Gemini CLI     |    2 | `GEMINI.md`                                                    | Fixture only               |
 | Aider          |    2 | `.aider.conf.yml`                                              | Fixture only               |
 
@@ -167,7 +196,7 @@ If no signal is found, Codex is selected. Because some signals—especially `.gi
 
 | Profile  | Use when                                                                                                | Typical behavior                                                                                  |
 | -------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Quick    | Read-only work, docs, formatting, localized safe fixes                                                  | Inspect, change if needed, run a focused check                                                    |
+| Quick    | Docs, formatting, bounded policy triage, localized safe fixes                                           | Inspect, change if needed, run a focused check                                                    |
 | Standard | Ordinary features and bugs                                                                              | Define acceptance criteria, make a short plan, implement, verify                                  |
 | Deep     | Greenfield systems, architecture, migrations, security, sensitive data, destructive or external effects | Specify, threat-model, compare alternatives, stage rollout and rollback, seek independent review  |
 | Incident | Urgent regressions                                                                                      | Reproduce, contain, apply the smallest safe fix, run targeted regression checks, record follow-up |
@@ -353,7 +382,7 @@ pnpm eval
 
 The command loads all scenarios and verifies safe and intentionally unsafe fixtures against objective graders. Default CI never performs model calls.
 
-Live evaluation is a separate, explicitly authorized activity. A live runner must record platform and agent version, scenario revision, repetitions, duration, tools, interventions, and token usage when available, and must set spend, timeout, concurrency, and credential boundaries. See the [live runner contract](evals/runners/README.md) and [pilot protocol](docs/pilots.md).
+Live evaluation is a separate, explicitly authorized activity. A live runner must record platform and agent version, scenario revision, repetitions, duration, tools, interventions, and token usage when available, and must set spend, timeout, concurrency, and credential boundaries. See the [live runner contract](evals/runners/README.md), [pilot protocol](docs/pilots.md), and [2026-09-05 exploratory results](docs/pilot-results-2026-09-05.md).
 
 ## Development
 
@@ -504,15 +533,15 @@ If registry metadata is temporarily unavailable, build and invoke `node dist/cli
 
 Local implementation and verification are complete. The latest recorded evidence is:
 
-- 36 deterministic tests passing;
-- coverage of 83.54% statements, 78.13% branches, 94% functions, and 85.76% lines;
+- 46 deterministic tests passing;
 - format, lint, typecheck, Markdown, build, and content-validation gates passing;
 - 33 canonical registry entries validated;
 - 15 behavioral scenarios and four safe/unsafe fixtures validated;
+- bounded Codex and Claude Code live-pilot drivers implemented and an exploratory two-family pilot recorded;
 - packed-package init, doctor, update/conflict, and uninstall lifecycle passing;
 - `@admirhodzic/project-bootstrap@2.0.0-beta.0` published to npm and verified through a clean registry install.
 
-Stable release still requires maintainer-controlled work: activate repository security settings, obtain independent beta review, run repeated Tier 1 live pilots, tune from those observations, configure trusted publishing, and publish from the approved tag workflow. Current evidence and blockers are maintained in [project state](docs/project-state.md).
+Stable release still requires maintainer-controlled work: activate repository security settings, obtain independent beta and pilot review, rerun the calibrated scenarios on Codex and Claude Code without changing revisions, configure trusted publishing, and publish from the approved tag workflow. Current evidence and blockers are maintained in [project state](docs/project-state.md).
 
 ## License
 
