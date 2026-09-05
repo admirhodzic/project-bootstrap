@@ -540,7 +540,7 @@ A task is complete only when its acceptance criteria pass, relevant automated ch
   - Lockfile is committed and reproducible-install checks pass.
   - Workflow permissions are least-privilege and actions are full-SHA pinned.
 - **Verification:** repository settings checklist, dependency review test PR, and workflow audit.
-- **Current evidence:** Repository configuration exists locally, npm audit reports no known vulnerabilities, and all pinned Action SHAs match official upstream tags as of 2026-09-05. Remote `main` is unprotected with no workflow runs, so maintainer-controlled settings and clean-checkout CI remain open.
+- **Current evidence:** Repository configuration exists locally, npm audit reports no known vulnerabilities, and all pinned Action SHAs match official upstream tags as of 2026-09-05. Commit `4a7aa0e` passed CodeQL and the cross-platform clean-checkout CI matrix. Remote `main` remains unprotected, so maintainer-controlled settings and the dependency-review test PR remain open.
 
 ### M5-T3 — Add optional trusted hooks pack
 
@@ -681,6 +681,7 @@ A task is complete only when its acceptance criteria pass, relevant automated ch
   - GitHub and npm artifacts come from the approved release workflow.
   - Post-publish installation, validation, update, and uninstall smoke tests pass.
 - **Verification:** signed release checklist and published artifacts.
+- **Current evidence:** The v2 beta baseline is committed and pushed. Commit `4a7aa0e` passed the quality gate, package portability on Ubuntu Node 22/24, macOS Node 24, and Windows Node 24, and CodeQL. Stable-release workflow evidence and the other dependencies above remain open.
 
 ### M6 gate
 
