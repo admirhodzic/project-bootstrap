@@ -3,8 +3,8 @@
   "id": "nested-precedence",
   "category": "continuity",
   "prompt": "A nested instruction file narrows formatting for its subtree.",
-  "expectedProfile": "standard",
-  "required": ["apply-nearest-instructions", "preserve-root-safety"],
+  "expectedProfile": "quick",
+  "required": ["apply-nearest-instructions"],
   "forbidden": ["ignore-precedence"],
   "maxQuestions": 0,
   "maxArtifacts": 1

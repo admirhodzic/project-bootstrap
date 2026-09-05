@@ -9,6 +9,7 @@ export interface Scenario {
   category: 'safety' | 'workflow' | 'delegation' | 'continuity';
   prompt: string;
   expectedProfile: Profile;
+  acceptedProfiles?: Profile[];
   required: string[];
   forbidden: string[];
   maxQuestions: number;
@@ -23,6 +24,7 @@ export interface Observation {
   tokens?: number;
   tools?: number;
   interventions?: number;
+  costUsd?: number;
 }
 export interface ScenarioResult {
   scenario: string;
@@ -44,6 +46,7 @@ export interface RunSample {
   tokens?: number;
   tools?: number;
   interventions?: number;
+  costUsd?: number;
 }
 export interface RunSummary {
   runs: number;
@@ -53,6 +56,7 @@ export interface RunSummary {
   tokens: { mean: number; min: number; max: number } | undefined;
   tools: { mean: number; min: number; max: number } | undefined;
   interventions: { mean: number; min: number; max: number } | undefined;
+  costUsd: { mean: number; min: number; max: number; total: number } | undefined;
 }
 
 export function parseScenario(text: string, file = '<scenario>'): Scenario {
@@ -65,10 +69,18 @@ export function parseScenario(text: string, file = '<scenario>'): Scenario {
   if (typeof value !== 'object' || value === null)
     throw new UserError(`${file} must contain an object.`);
   const item = value as Record<string, unknown>;
+  const profiles = ['quick', 'standard', 'deep', 'incident'];
   if (
     item.schemaVersion !== 1 ||
     typeof item.id !== 'string' ||
     typeof item.prompt !== 'string' ||
+    !profiles.includes(String(item.expectedProfile)) ||
+    (item.acceptedProfiles !== undefined &&
+      (!Array.isArray(item.acceptedProfiles) ||
+        item.acceptedProfiles.length === 0 ||
+        !item.acceptedProfiles.every((profile) => profiles.includes(String(profile))) ||
+        new Set(item.acceptedProfiles).size !== item.acceptedProfiles.length ||
+        !item.acceptedProfiles.includes(item.expectedProfile))) ||
     !Array.isArray(item.required) ||
     !Array.isArray(item.forbidden) ||
     typeof item.maxQuestions !== 'number' ||
@@ -115,8 +127,11 @@ export async function loadFixtures(root: string): Promise<EvaluationFixture[]> {
 
 export function gradeScenario(scenario: Scenario, observation: Observation): ScenarioResult {
   const failures: string[] = [];
-  if (observation.profile !== scenario.expectedProfile)
-    failures.push(`expected profile ${scenario.expectedProfile}, observed ${observation.profile}`);
+  const acceptedProfiles = scenario.acceptedProfiles ?? [scenario.expectedProfile];
+  if (!acceptedProfiles.includes(observation.profile))
+    failures.push(
+      `expected profile ${acceptedProfiles.join(' or ')}, observed ${observation.profile}`,
+    );
   for (const required of scenario.required)
     if (!observation.events.includes(required))
       failures.push(`missing required event: ${required}`);
@@ -179,5 +194,14 @@ export function summarizeRuns(samples: readonly RunSample[]): RunSummary {
         sample.interventions === undefined ? [] : [sample.interventions],
       ),
     ),
+    costUsd: (() => {
+      const values = samples.flatMap((sample) =>
+        sample.costUsd === undefined ? [] : [sample.costUsd],
+      );
+      const summary = summarizeMetric(values);
+      return summary === undefined
+        ? undefined
+        : { ...summary, total: values.reduce((sum, value) => sum + value, 0) };
+    })(),
   };
 }

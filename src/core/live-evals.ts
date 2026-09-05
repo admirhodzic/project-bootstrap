@@ -105,7 +105,7 @@ export function parseObservation(text: string): Observation {
     Number(item.artifacts) < 0
   )
     throw new UserError('Live observation does not match the required contract.');
-  for (const optionalMetric of ['durationMs', 'tokens', 'tools', 'interventions'])
+  for (const optionalMetric of ['durationMs', 'tokens', 'tools', 'interventions', 'costUsd'])
     if (
       item[optionalMetric] !== undefined &&
       (!Number.isFinite(item[optionalMetric]) || Number(item[optionalMetric]) < 0)
@@ -277,6 +277,7 @@ export async function runLiveEvaluation(options: LiveRunOptions): Promise<LiveRu
         ...(observation?.interventions === undefined
           ? {}
           : { interventions: observation.interventions }),
+        ...(observation?.costUsd === undefined ? {} : { costUsd: observation.costUsd }),
         ...(error ? { error } : {}),
       });
     } finally {

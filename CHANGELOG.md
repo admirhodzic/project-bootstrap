@@ -8,6 +8,16 @@ All notable changes to Project Bootstrap are documented here.
 
 - Hardened CI and release automation with cross-platform packed-artifact smoke tests, tag/package-version validation, prerelease dist-tag selection, registry post-publish verification, and curated release notes.
 - Added the missing vendor-neutral live evaluation runner with isolated fixture directories, bounded execution, explicit environment allowlisting, redacted raw output, and JSON/Markdown reports.
+- Aligned the stable pilot gate with the implementation plan by selecting Codex and Claude Code as the two required agent families while retaining conservative labels for platforms without live evidence.
+- Added reviewed structured-output drivers for bounded Codex and Claude Code policy-comprehension pilots, including provider-reported cost metrics where available.
+- Clarified that a current verification failure contradicting recorded passing state uses the Incident workflow and current evidence takes precedence.
+- Corrected the dependency-proposal evaluation to expect Standard rigor while retaining explicit dependency rationale, alternative evaluation, and license checks; Deep remains reserved for changes that meet a Deep trigger such as architecture or sensitive data.
+- Corrected the external-write review evaluation to expect Standard rigor while preserving its read-only requirement and prohibitions on external writes and unauthorized commits.
+- Calibrated workflow scenarios from live Codex evidence: localized bugs, bounded injection triage, and nested formatting use Quick; stale state contradicted by the current diff uses Incident; and bounded independent research uses Standard.
+- Tightened the root contract so nested instructions cannot weaken root safeguards and any containment failure rejects the full mutation plan before writes begin.
+- Made adjacent rigor profiles explicitly acceptable in scenarios where live evidence showed both choices were proportionate, while retaining exact profile assertions for canonical workflow-selection cases and mandatory safety outcomes.
+- Required parallel research results to be synthesized before action or handoff.
+- Recorded the first bounded Codex/Claude exploratory pilot, its provider-reported cost, limitations, and why it was not promoted to a stable baseline.
 
 ### Security
 

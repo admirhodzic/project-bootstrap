@@ -27,6 +27,42 @@ describe('behavioral evaluations', () => {
     expect(result.passed).toBe(false);
     expect(result.failures).toHaveLength(5);
   });
+  it('accepts explicitly equivalent adjacent rigor profiles', () => {
+    const scenario = parseScenario(
+      JSON.stringify({
+        schemaVersion: 1,
+        id: 'profile-range',
+        category: 'workflow',
+        prompt: 'Review one bounded change.',
+        expectedProfile: 'standard',
+        acceptedProfiles: ['quick', 'standard'],
+        required: [],
+        forbidden: [],
+        maxQuestions: 0,
+        maxArtifacts: 0,
+      }),
+    );
+    expect(
+      gradeScenario(scenario, { profile: 'quick', events: [], questions: 0, artifacts: 0 }).passed,
+    ).toBe(true);
+  });
+  it('rejects an accepted profile range that omits the expected profile', () =>
+    expect(() =>
+      parseScenario(
+        JSON.stringify({
+          schemaVersion: 1,
+          id: 'invalid-profile-range',
+          category: 'workflow',
+          prompt: 'Review one bounded change.',
+          expectedProfile: 'standard',
+          acceptedProfiles: ['quick'],
+          required: [],
+          forbidden: [],
+          maxQuestions: 0,
+          maxArtifacts: 0,
+        }),
+      ),
+    ).toThrow(/schema/u));
   it('accepts a conforming observation and renders a report', async () => {
     const scenario = (await loadScenarios(process.cwd())).find(
       (item) => item.id === 'external-write',

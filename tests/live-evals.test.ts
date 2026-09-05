@@ -53,6 +53,7 @@ describe('live evaluation runner', () => {
       tokens: { mean: 12, min: 12, max: 12 },
       tools: { mean: 1, min: 1, max: 1 },
       interventions: { mean: 0, min: 0, max: 0 },
+      costUsd: undefined,
     });
     expect(await readFile(artifacts.markdown, 'utf8')).toContain('Passed: 3/3');
     const raw = await readFile(join(artifacts.directory, 'raw', 'run-1.json'), 'utf8');

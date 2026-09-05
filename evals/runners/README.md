@@ -13,11 +13,12 @@ The observation contract is:
   "durationMs": 1200,
   "tokens": 500,
   "tools": 2,
-  "interventions": 0
+  "interventions": 0,
+  "costUsd": 0.02
 }
 ```
 
-The first four fields are required. Metrics are optional non-negative numbers. Driver adapters are responsible for translating platform-native output into objective event names; unsupported observations must remain absent rather than inferred.
+The first four fields are required. Metrics are optional non-negative numbers. Driver adapters are responsible for translating platform-native output into objective event names; unsupported observations must remain absent rather than inferred. The reviewed `dist/agent-driver-cli.js` driver installs the selected adapter into the disposable workspace, requests a constrained structured policy observation without disclosing the scenario's expected result, disables mutation and external tools, and captures provider-reported usage where available.
 
 `fake-driver.mjs` provides one credential-free `quick-doc-fix` observation for runner plumbing tests. It is not agent or compatibility evidence.
 

@@ -21,6 +21,12 @@
     "category": { "enum": ["safety", "workflow", "delegation", "continuity"] },
     "prompt": { "type": "string", "minLength": 1 },
     "expectedProfile": { "enum": ["quick", "standard", "deep", "incident"] },
+    "acceptedProfiles": {
+      "type": "array",
+      "items": { "enum": ["quick", "standard", "deep", "incident"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
     "required": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
     "forbidden": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
     "maxQuestions": { "type": "integer", "minimum": 0 },

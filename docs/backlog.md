@@ -45,7 +45,7 @@ A task is complete only when its acceptance criteria pass, relevant automated ch
 - **M3:** [x] M3-T1 · [x] M3-T2 · [x] M3-T3 · [x] M3-T4 · [x] M3-T5 · [~] M3-T6 · [x] M3-T7 · [x] M3-T8 · [x] M3-T9 · [x] M3-T10 · [x] M3-T11
 - **M4:** [x] M4-T1 · [x] M4-T2 · [x] M4-T3 · [x] M4-T4 · [x] M4-T5 · [x] M4-T6 · [x] M4-T7 · [x] M4-T8
 - **M5:** [x] M5-T1 · [\~] M5-T2 · [x] M5-T3 · [x] M5-T4 · [x] M5-T5 · [x] M5-T6 · [\~] M5-T7 · [!] M5-T8
-- **M6:** [!] M6-T1 · [~] M6-T2 · [x] M6-T3 · [x] M6-T4 · [!] M6-T5 · [!] M6-T6
+- **M6:** [\~] M6-T1 · [\~] M6-T2 · [x] M6-T3 · [x] M6-T4 · [\~] M6-T5 · [!] M6-T6
 
 ## 3. M1 — Foundation and compatibility rescue
 
@@ -619,17 +619,17 @@ A task is complete only when its acceptance criteria pass, relevant automated ch
 
 ## 8. M6 — Ecosystem validation and stable v2 release
 
-### M6-T1 — Run Tier 1 compatibility pilot
+### M6-T1 — Run two-family compatibility pilot
 
 - **Priority / size:** P0 / L
 - **Dependencies:** M5
 - **Acceptance criteria:**
-  - Codex, GitHub Copilot, Cursor, Cline, and Windsurf each run the applicable P0/P1 scenario subset.
+  - OpenAI Codex and Claude Code are the two supported agent families used for the stable-release threshold, and each runs every applicable P0/P1 scenario.
   - Each nondeterministic scenario is repeated at least three times.
   - Agent/version, platform, date, result, limitations, and evidence are recorded.
-  - Failures produce issues or corrected compatibility claims.
+  - Failures produce issues or corrected compatibility claims, and platforms without live evidence remain explicitly labeled documented or fixture-only.
 - **Verification:** published pilot report and baseline artifacts.
-- **Current evidence:** The vendor-neutral live runner passes a three-repetition credential-free fake-driver test with bounded execution and redacted reports. No model-backed Tier 1 pilot has been authorized or run.
+- **Current evidence:** The vendor-neutral runner and reviewed Codex/Claude drivers are implemented and locally verified. The authorized 2026-09-05 exploratory pilot completed a 45-observation Claude campaign and iterative Codex runs, found no forbidden behavior or external action, and drove grader/content corrections. It did not meet the same-revision two-family threshold; see `docs/pilot-results-2026-09-05.md`.
 
 ### M6-T2 — Validate Tier 2 adapters
 
@@ -685,20 +685,19 @@ A task is complete only when its acceptance criteria pass, relevant automated ch
 
 ### M6 gate
 
-- [ ] Tier 1 compatibility evidence is current and repeatable.
+- [ ] Two-family compatibility evidence is current and repeatable.
 - [ ] Evaluation-driven fixes meet the stable thresholds.
 - [x] Community adapter process is documented and tested.
 - [ ] v2.0.0 package and GitHub release pass post-publish smoke tests.
 
 ## 9. Recommended execution order
 
-Local implementation has progressed through M6, and the npm scope was confirmed by publishing `2.0.0-beta.0`. The next work is external validation in this order: reconcile release metadata, activate repository security settings and trusted publishing, identify stable-release ownership, obtain independent security/code review, run repeated Tier 1 pilots, tune from those observations, rehearse the release, then obtain explicit tag and stable-publication approval.
+Local implementation has progressed through M6, and the npm scope was confirmed by publishing `2.0.0-beta.0`. The next work is external validation in this order: activate repository security settings and trusted publishing, identify stable-release ownership, obtain independent security/code review, run repeated Codex and Claude Code pilots, tune from those observations, rehearse the release, then obtain explicit tag and stable-publication approval.
 
 ## 10. Decisions required from the maintainer
 
 Apache-2.0 and GitHub private vulnerability reporting are selected locally. npm scope ownership is confirmed by the public beta. The remaining decisions require maintainer or account authority:
 
 1. **Repository security settings:** enable and verify the controls in `docs/repository-security.md`.
-2. **Tier 1 access and spend:** authorize the platforms and any billable calls used by repeated live pilots.
-3. **Independent reviewer:** assign a reviewer for the beta security/code audit.
-4. **Release ownership:** identify who may approve the protected environment, tag, npm publication, and GitHub release.
+2. **Independent reviewer:** assign a reviewer for the beta security/code audit and live-pilot baseline acceptance.
+3. **Release ownership:** identify who may approve the protected environment, tag, npm publication, and GitHub release.

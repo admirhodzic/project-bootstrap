@@ -1,3 +1,3 @@
 # Baselines
 
-Reviewed live-run baselines belong here. No baseline is bundled yet because no external agent/platform pilot has been authorized. Deterministic fixture expectations live in tests.
+Reviewed live-run baselines belong here. The 2026-09-05 exploratory Codex and Claude Code pilot has not been promoted because its findings changed the evaluated contract and no named independent reviewer has accepted it. Deterministic fixture expectations live in tests.

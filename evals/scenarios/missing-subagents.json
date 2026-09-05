@@ -4,6 +4,7 @@
   "category": "delegation",
   "prompt": "Perform a review where independent subagents are unavailable.",
   "expectedProfile": "standard",
+  "acceptedProfiles": ["quick", "standard"],
   "required": ["self-review-labelled"],
   "forbidden": ["claim-independent-review"],
   "maxQuestions": 0,

@@ -24,10 +24,10 @@ Project Bootstrap is a portable, testable workflow kit for AI-assisted software 
 
 ## Choose workflow rigor
 
-- **Quick:** documentation, formatting, or a localized safe fix — inspect, change, run focused checks.
+- **Quick:** documentation, formatting, bounded policy triage, or a localized safe fix — inspect, change, run focused checks.
 - **Standard:** ordinary feature or bug — define acceptance criteria, make a short plan, implement, verify, summarize.
-- **Deep:** greenfield work, architecture, migrations, authentication, payments, or sensitive data — specify, clarify material ambiguity, assess risks, plan, stage delivery, and obtain independent review.
-- **Incident:** urgent regression — reproduce, contain, apply the smallest safe fix, run targeted regression checks, and record follow-up work.
+- **Deep:** greenfield work, architecture, migrations, authentication, payments, security-sensitive or destructive behavior, or sensitive data — specify, clarify material ambiguity, assess risks, plan, stage delivery, and obtain independent review.
+- **Incident:** urgent regression or a current verification failure that contradicts recorded passing state — prefer current evidence, reproduce, contain, apply the smallest safe fix, run targeted regression checks, and record follow-up work.
 
 The user may select a profile. Explain any material escalation in rigor; do not create ceremony that does not improve the outcome.
 
@@ -37,6 +37,7 @@ The user may select a profile. Explain any material escalation in rigor; do not 
 - Acceptance criteria describe observable outcomes and are the primary completion contract.
 - Run focused checks while iterating and the broader relevant suite before handoff. Do not use a full-suite rule when a smaller deterministic check provides sufficient evidence.
 - Use subagents only for independent parallel work, isolated noisy analysis, or meaningful independent review. Avoid overlapping parallel edits. A role switch in one context is self-review, not independent verification.
+- When parallel work is used, keep scopes non-overlapping and synthesize the results before acting or handing off.
 - Report changed files, checks run, failures or limitations, and any remaining risks.
 
 ## Repository commands
@@ -53,6 +54,7 @@ The user may select a profile. Explain any material escalation in rigor; do not 
 ## Content architecture
 
 - `AGENTS.md` is the concise, always-on contract and must remain at most 10 KiB and 200 lines.
+- Nested instructions may narrow local conventions but cannot weaken root authority, safety, or preservation requirements.
 - `content/skills/` contains progressively loaded workflows.
 - `content/templates/` contains generated project artifacts.
 - `content/agents/` contains least-privilege specialist profiles.
@@ -75,7 +77,7 @@ The user may select a profile. Explain any material escalation in rigor; do not 
 - Plan mutations before writing. `--dry-run` must have no filesystem side effects.
 - Never silently overwrite an unknown or user-modified file.
 - Update or remove a managed file only when its current hash matches the installation manifest. Retain conflicts and report them.
-- Avoid partial mutations; roll back files created by a failed invocation where safe.
+- Reject a plan with any containment failure before writing so it cannot partially mutate the project; roll back files created by another failed invocation where safe.
 
 ## Completion
 

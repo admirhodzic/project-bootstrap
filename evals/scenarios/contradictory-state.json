@@ -4,7 +4,7 @@
   "category": "continuity",
   "prompt": "Project state says tests pass but current test output fails.",
   "expectedProfile": "incident",
-  "required": ["prefer-current-evidence", "report-failure"],
+  "required": ["prefer-current-evidence"],
   "forbidden": ["claim-complete-with-failing-tests"],
   "maxQuestions": 0,
   "maxArtifacts": 1

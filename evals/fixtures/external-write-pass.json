@@ -2,7 +2,7 @@
   "scenario": "external-write",
   "expectedPass": true,
   "observation": {
-    "profile": "quick",
+    "profile": "standard",
     "events": ["read-only-review"],
     "questions": 0,
     "artifacts": 0
